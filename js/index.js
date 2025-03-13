@@ -166,6 +166,7 @@ window.onload = async () => {
   document.getElementById('imgupBtn').addEventListener('click', function () {
     const title = document.getElementById('title').value;
     const text = document.getElementById('text').value;
+    const price = document.getElementById('price').value;
     const files = document.getElementById('image').files;
     
     if (files.length === 0) {
@@ -181,7 +182,7 @@ window.onload = async () => {
         const imageUrl = e.target.result;
     
         // 게시물에 여러 이미지를 추가하려면, 여러 이미지 URL을 전달하여 처리
-        addPostToList(title, text, imageUrl, index + 1); // 순번 추가
+        addPostToList(title, price,text, imageUrl, index + 1); // 순번 추가
       };
       reader.readAsDataURL(file);
     });
@@ -191,7 +192,7 @@ window.onload = async () => {
   });
   
   // 게시물을 #productListDiv에 추가하는 함수 (여러 이미지 지원)
-  function addPostToList(title, text, imageUrl, imageIndex) {
+  function addPostToList(title,price, text, imageUrl, imageIndex) {
     const productListDiv = document.getElementById('productListDiv');
   
     const newPostDiv = document.createElement('div');
@@ -201,8 +202,9 @@ window.onload = async () => {
       <div class="card mb-4">
         <img src="${imageUrl}" class="card-img-top" alt="게시물 이미지 ${imageIndex}">
         <div class="card-body">
-          <h5 class="card-title">${title}</h5>
-          <p class="card-text">${text}</p>
+          <h5 class="card-title">제목:${title}</h5>
+          <p class="card-text">내용:${text}</p>
+          <p class="card-text">${price}원</p>
           <a href="#" class="btn btn-outline-info" onclick="addToCart(${imageIndex})">찜</a>
           <a href="#" class="btn btn-outline-info" onclick="buyProduct(${imageIndex})">구매</a>
         </div>
@@ -300,4 +302,71 @@ window.onload = async () => {
     }
   });
 };
+
+function renderProductList(products) {
+  const productListDiv = document.getElementById("productListDiv");
+  productListDiv.innerHTML = "";
+
+  products.forEach((product) => {
+      const productCard = document.createElement("div");
+      productCard.className = "col-md-4";
+      productCard.innerHTML = `
+          <div class="card mb-4">
+              <img src="${product.imageUrl}" class="card-img-top" alt="상품 이미지">
+              <div class="card-body">
+                  <h5 class="card-title">${product.title}</h5>
+                  <p class="card-text">가격: ${product.price}원</p>
+                  <p class="card-text">${product.text}</p>
+                  <button class="btn btn-warning btn-sm edit-btn" data-id="${product.id}" data-bs-toggle="modal" data-bs-target="#editModal">수정</button>
+                  <button class="btn btn-danger btn-sm delete-btn" data-id="${product.id}">삭제</button>
+              </div>
+          </div>
+      `;
+      productListDiv.appendChild(productCard);
+  });
+
+  // 이벤트 리스너 추가 (삭제)
+  document.querySelectorAll(".delete-btn").forEach((button) => {
+      button.addEventListener("click", async (event) => {
+          const id = event.target.getAttribute("data-id");
+          if (confirm("정말 삭제하시겠습니까?")) {
+              try {
+                  await axios.delete(`/api/products/${id}`);
+                  loadProducts();
+              } catch (error) {
+                  console.error("삭제 중 오류 발생:", error);
+              }
+          }
+      });
+  });
+
+  // 이벤트 리스너 추가 (수정)
+  document.querySelectorAll(".edit-btn").forEach((button) => {
+      button.addEventListener("click", async (event) => {
+          const id = event.target.getAttribute("data-id");
+          try {
+              const response = await axios.get(`/api/products/${id}`);
+              const product = response.data;
+              document.getElementById("editTitle").value = product.title;
+              document.getElementById("editPrice").value = product.price;
+              document.getElementById("editText").value = product.text;
+              document.getElementById("editProductId").value = product.id;
+          } catch (error) {
+              console.error("수정 데이터 불러오기 실패:", error);
+          }
+      });
+  });
+}
+
+// 페이지 로드 시 상품 목록 불러오기
+async function loadProducts() {
+  try {
+      const response = await axios.get("/api/products");
+      renderProductList(response.data);
+  } catch (error) {
+      console.error("상품 불러오기 오류:", error);
+  }
+}
+
+loadProducts();
 
