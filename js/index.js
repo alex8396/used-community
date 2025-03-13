@@ -368,5 +368,26 @@ async function loadProducts() {
   }
 }
 
+// 로그인 상태 확인 함수
+function checkLoginStatus() {
+  const token = sessionStorage.getItem("authToken");
+  
+  if (token) {
+    // 사용자가 로그인된 경우: 회원가입 링크를 숨기고, 로그인 상태 메시지 표시
+    document.getElementById("signupSpan").style.display = "none";
+    document.getElementById("loginSpan").style.display = "none";  // 로그인 링크도 숨기거나 로그아웃 링크로 대체 가능
+    document.getElementById("effectMsg").innerText = "로그인 되었습니다.";
+  } else {
+    // 로그인되지 않은 경우: 회원가입 및 로그인 링크 표시
+    document.getElementById("signupSpan").style.display = "block";
+    document.getElementById("loginSpan").style.display = "block";
+    document.getElementById("effectMsg").innerText = "안녕하세요 중고거래 플랫폼입니다.";
+  }
+}
+
+// 페이지 로드 시 로그인 상태 확인
+window.onload = checkLoginStatus;
+
+
 loadProducts();
 
