@@ -23,7 +23,7 @@ document.getElementById("signupBtn").addEventListener("click", async ()=>{
     const email = document.getElementById("loginEmail").value;
     const pwd = document.getElementById("loginPwd").value;
     const data = {  email, pwd };
-    const response=await axios.post("http://localhost:8080/tokenLogin" , data);
+    const response=await axios.post("http://localhost:8080/login" , data);
     
     document.getElementById("loginSpan").innerHTML=`${response.data.nickname}  
     <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>`;
