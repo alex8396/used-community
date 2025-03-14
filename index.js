@@ -8,7 +8,6 @@ window.onload = async () => {
 
   openModalBtn.onclick = () => {
     modal.style.display = "flex";
-    loginBtn.style.display = "block";
   };
 
   closeModalBtn.onclick = () => {
@@ -28,6 +27,7 @@ window.onload = async () => {
   const gotoSignup = document.getElementById("gotoSignup");
   const gotoLogin = document.getElementById("gotoLogin");
   const nicknameWrapper = document.getElementById("modalNicknameWrapper");
+  const welcomeMessage = document.getElementById("welcomeMessage");
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
   const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
@@ -38,8 +38,31 @@ window.onload = async () => {
   };
 
   // 회원가입 버튼 클릭
-  signupBtn.onclick = () => {
-    validateSignupForm();
+  signupBtn.onclick = async () => {
+    if (!validateSignupForm()) return; // 유효성 검사 실패 시 종료
+  
+    // 버튼 비활성화 + 로딩 UI 추가
+    signupBtn.disabled = true;
+    signupBtn.innerHTML = `<span class="spinner"></span>`;
+    signupBtn.style.backgroundColor = "#e78787";
+    signupBtn.style.cursor = "default";
+  
+    try {
+      const response = await signup(emailInput.value, passwordInput.value, nicknameInput.value);
+      console.log(response)
+      if (response.data=="회원 가입 성공") {
+        // 회원가입 성공 → 폼 숨기고 환영 메시지 표시
+        welcomeMessage.style.display = "flex";  // div를 보이게
+        resetSignupButton();
+      } else {
+        alert(`회원가입 실패: ${response.message}`);
+        resetSignupButton();
+      }
+    } catch (error) {
+      console.error("회원가입 오류:", error);
+      alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+      resetSignupButton();
+    }
   };
 
   // 회원가입 화면으로 전환
@@ -50,6 +73,13 @@ window.onload = async () => {
   // 로그인 화면으로 전환
   gotoLogin.onclick = () => {
     toggleAuthForm(false);
+  };
+
+  const resetSignupButton = () => {
+    signupBtn.disabled = false;
+    signupBtn.innerHTML = `회원가입`;
+    signupBtn.style.backgroundColor = "#ef0e0e";
+    signupBtn.style.cursor = "pointer";
   };
 
   // 폼 유효성 검사 (로그인)
@@ -74,38 +104,31 @@ window.onload = async () => {
   };
 
   // 폼 유효성 검사 (회원가입)
-  const validateSignupForm = async() => {
+  const validateSignupForm = () => {
+    let isValid = true;
+  
     if (!emailRegex.test(emailInput.value)) {
       emailErrorMsg.innerHTML = `<div>유효하지 않은 이메일 형식이에요</div>`;
+      isValid = false;
     } else {
       emailErrorMsg.innerHTML = ``;
     }
-
+  
     if (!passwordRegex.test(passwordInput.value)) {
       passwordErrorMsg.innerHTML = `<div>비밀번호는 8자리 이상, 특수문자와 숫자를 포함해주세요</div>`;
+      isValid = false;
     } else {
       passwordErrorMsg.innerHTML = ``;
     }
-
-    if (nicknameInput.value === "") {
+  
+    if (nicknameInput.value.trim() === "") {
       nicknameErrorMsg.innerHTML = `<div>닉네임을 입력해주세요</div>`;
+      isValid = false;
     } else {
       nicknameErrorMsg.innerHTML = ``;
     }
-
-    if (emailRegex.test(emailInput.value) && passwordRegex.test(passwordInput.value) && nicknameInput.value !== "") {
-      console.log("회원가입 이메일:", emailInput.value);
-      console.log("회원가입 비밀번호:", passwordInput.value);
-      console.log("회원가입 닉네임:", nicknameInput.value);
-      try {
-        const response = await signup(emailInput.value, passwordInput.value, nicknameInput.value);
-        console.log(response);
-        
-    } catch (error) {
-        console.error("회원가입 실패:", error);
-    }
-
-    }
+  
+    return isValid;
   };
 
   // 로그인/회원가입 화면 전환
@@ -115,7 +138,8 @@ window.onload = async () => {
     loginBtn.style.display = isSignup ? "none" : "block";
     gotoSignup.style.display = isSignup ? "none" : "block";
     gotoLogin.style.display = isSignup ? "block" : "none";
-
+    gotoLogin.style.display = isSignup ? "block" : "none";
+    welcomeMessage.style.display = "none";
     resetAuthForm();
   };
 
@@ -129,9 +153,11 @@ window.onload = async () => {
     nicknameInput.value = "";
   };
 
-  // 엔터키 입력 시 버튼 클릭 처리
   const handleEnterKey = (event) => {
+    // 엔터 키를 눌렀을 때만 기본 동작을 막음
     if (event.key === "Enter") {
+      event.preventDefault();  // 새로고침 방지
+  
       if (document.activeElement === emailInput || document.activeElement === passwordInput || document.activeElement === nicknameInput) {
         if (signupBtn.style.display === "block") {
           signupBtn.click();  // 회원가입 버튼 클릭
@@ -140,10 +166,25 @@ window.onload = async () => {
         }
       }
     }
+    // 다른 키는 기본 동작을 허용 (영어 입력 등)
   };
 
   // 엔터키 입력 감지
   document.addEventListener("keydown", handleEnterKey);
+
+  window.onclick = (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
+      resetAuthForm();
+    }
+  };
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      modal.style.display = "none";
+      resetAuthForm();
+    }
+  });
+
 
 
 
