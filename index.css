@@ -17,6 +17,7 @@ header{
     justify-content: end;
 }
 #authButton{
+    display: none;
     height: 39px;
     padding: 0 15px;
     font-size: 14px;
@@ -26,6 +27,27 @@ header{
 }
 #authButton:hover {
     cursor: pointer;
+}
+#logoutButton{
+    display: none;
+    height: 39px;
+    padding: 0 15px;
+    font-size: 14px;
+    color: #595959;   
+    display: flex;
+    align-items: center;
+}
+#logoutButton:hover {
+    cursor: pointer;
+}
+#nickname{
+    display: none;
+    height: 39px;
+    padding: 0 15px;
+    font-size: 14px; 
+    display: flex;
+    align-items: center;
+    font-weight: bold;
 }
 
 nav{
