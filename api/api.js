@@ -4,7 +4,7 @@ const URL = "http://localhost:8080";
 export async function signup( email, pwd, nickname) {
     try {
         const response = await axios.post(`${URL}/signup`, { email, pwd, nickname});
-        return response.data;
+        return response;
     } catch (error) {
         console.error('Error signup:', error);
         throw error;

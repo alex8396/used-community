@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    
     <!-- main.css -->
     <link rel="stylesheet" href="./index.css">
 
@@ -8,7 +9,7 @@
     <script defer src=""></script>
 
     <title>번개장터</title>
-    <link rel="icon" href="./img/bgzt_logo.svg">
+    <link rel="icon" href="./img/bgzt_favicon.svg">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
@@ -71,12 +72,16 @@
               <input type="text" placeholder="닉네임" class="modalInput" id="nicknameInput">
             </div>
             <div id="nicknameErrorMsg"></div>
-            <button type="button" id="modalLoginBtn">
+            <button type="button" id="modalLoginBtn" style="display: block;">
               로그인
             </button>
             <button type="button" id="modalSignupBtn">
               회원가입
             </button>
+            <div id="welcomeMessage">
+              <h2>환영합니다!</h2>
+              <p>가입이 완료되었어요!</p>
+            </div>
           </form>
           
         </div>
