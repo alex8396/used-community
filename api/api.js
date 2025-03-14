@@ -1,12 +1,32 @@
 const URL = "http://localhost:8080";
 
-// 모든 제품을 가져오는 함수
 export async function signup( email, pwd, nickname) {
     try {
         const response = await axios.post(`${URL}/signup`, { email, pwd, nickname});
         return response;
     } catch (error) {
         console.error('Error signup:', error);
+        throw error;
+    }
+}
+export async function login( email, pwd) {
+    try {
+        const response = await axios.post(`${URL}/login`, { email, pwd});
+        return response;
+    } catch (error) {
+        console.error('Error login:', error);
+        throw error;
+    }
+}
+export async function logout() {
+    try {
+        await axios.post(`${URL}/logout`);
+        sessionStorage.removeItem("nickname");
+        sessionStorage.removeItem("Authorization");
+        axios.defaults.headers.common['Authorization'] = ''; // Authorization 헤더에서 삭제       
+        window.location.reload();
+    } catch (error) {
+        console.error('Error logout:', error);
         throw error;
     }
 }

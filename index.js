@@ -1,4 +1,4 @@
-import { signup, getRecentReviews, insertReview, addToCart, getCartItems } from './api/api.js';
+import { signup, login, logout, getRecentReviews, insertReview, addToCart, getCartItems } from './api/api.js';
 
 window.onload = async () => {
   // 모달
@@ -28,13 +28,59 @@ window.onload = async () => {
   const gotoLogin = document.getElementById("gotoLogin");
   const nicknameWrapper = document.getElementById("modalNicknameWrapper");
   const welcomeMessage = document.getElementById("welcomeMessage");
+  const nickname = document.getElementById("nickname");
+  const authButton = document.getElementById("authButton");
+  const logoutButton = document.getElementById("logoutButton");
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
   const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
 
   // 로그인 버튼 클릭
-  loginBtn.onclick = () => {
-    validateLoginForm();
+  loginBtn.onclick = async() => {
+    console.log("login누름")
+    if (!validateLoginForm()) return; // 유효성 검사 실패 시 종료
+    
+    // 버튼 비활성화 + 로딩 UI 추가
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = `<span class="spinner"></span>`;
+    loginBtn.style.backgroundColor = "#e78787";
+    loginBtn.style.cursor = "default";
+  
+    try {
+      const response = await login(emailInput.value, passwordInput.value);
+      console.log(response);
+      if (response.data.status=="ok") {
+        modal.style.display = "none";
+        resetLoginButton();
+        console.log
+        const token = response.data.Authorization;
+        sessionStorage.setItem('Authorization', token);
+        sessionStorage.setItem('nickname', response.data.nickname);
+        axios.defaults.headers.common['Authorization'] = token;
+        nickname.innerHTML = response.data.nickname;
+        toggleLoginState(true);
+      } else {
+        alert(`${response.data.msg}`);
+        resetLoginButton();
+      }
+    } catch (error) {
+      console.error("로그인 오류:", error);
+      resetLoginButton();
+      alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");      
+    }
+  };
+
+  logoutButton.onclick = async() => {
+    logoutButton.disabled = true;
+    try {
+      await logout();
+      logoutButton.disabled = false;
+    } catch (error) {
+      console.error("로그아웃 오류:", error);
+      resetLoginButton();
+      alert("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");      
+      logoutButton.disabled = false;
+    }
   };
 
   // 회원가입 버튼 클릭
@@ -49,7 +95,6 @@ window.onload = async () => {
   
     try {
       const response = await signup(emailInput.value, passwordInput.value, nicknameInput.value);
-      console.log(response)
       if (response.data=="회원 가입 성공") {
         // 회원가입 성공 → 폼 숨기고 환영 메시지 표시
         welcomeMessage.style.display = "flex";  // div를 보이게
@@ -81,26 +126,36 @@ window.onload = async () => {
     signupBtn.style.backgroundColor = "#ef0e0e";
     signupBtn.style.cursor = "pointer";
   };
+  const resetLoginButton = () => {
+    loginBtn.disabled = false;
+    loginBtn.innerHTML = `로그인`;
+    loginBtn.style.backgroundColor = "#ef0e0e";
+    loginBtn.style.cursor = "pointer";
+  };
 
   // 폼 유효성 검사 (로그인)
   const validateLoginForm = () => {
+    let isValid = true;
     if (!emailRegex.test(emailInput.value)) {
       emailErrorMsg.innerHTML = `<div>유효하지 않은 이메일 형식이에요</div>`;
+      isValid = false;
     } else {
       emailErrorMsg.innerHTML = ``;
     }
 
     if (!passwordRegex.test(passwordInput.value)) {
       passwordErrorMsg.innerHTML = `<div>비밀번호는 8자리 이상, 특수문자와 숫자를 포함해요</div>`;
+      isValid = false;
     } else {
       passwordErrorMsg.innerHTML = ``;
     }
 
     if (emailRegex.test(emailInput.value) && passwordRegex.test(passwordInput.value)) {
-
       console.log("로그인 이메일:", emailInput.value);
       console.log("로그인 비밀번호:", passwordInput.value);
     }
+
+    return isValid;
   };
 
   // 폼 유효성 검사 (회원가입)
@@ -184,6 +239,23 @@ window.onload = async () => {
       resetAuthForm();
     }
   });
+
+  const toggleLoginState = (isLogin) => {
+    nickname.innerHTML = sessionStorage.getItem('nickname');
+    nickname.style.display = isLogin ? "flex" : "none";
+    authButton.style.display = isLogin ? "none" : "flex";
+    logoutButton.style.display = isLogin ? "flex" : "none";
+  }
+  const auth = sessionStorage.getItem('Authorization');
+  if(auth){
+    toggleLoginState(true);
+    axios.defaults.headers.common['Authorization'] = auth;
+
+  }else{
+    toggleLoginState(false);
+  }
+
+
 
 
 
