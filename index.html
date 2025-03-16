@@ -3,13 +3,14 @@
   <head>
     
     <!-- main.css -->
-    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="/index.css">
+    
+    <script type="module" src="/index.js"></script>
 
-    <!-- URL : / -->
-    <script defer src=""></script>
+   
 
     <title>번개장터</title>
-    <link rel="icon" href="./img/bgzt_favicon.svg">
+    <link rel="icon" href="/img/bgzt_favicon.svg">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
@@ -17,13 +18,6 @@
     <!-- Header -->
     <header class="w-100">
       <div id="headerContent">
-        <div id="authButton">
-          로그인/회원가입
-        </div>
-        <div id="logoutButton">
-          로그아웃
-        </div>
-        <div id="nickname"></div>
       </div>
     </header>
     
@@ -31,7 +25,7 @@
     <nav>
       <div id="navTop">
         <a href="/" id="logoLink">
-          <img src="./img/bgzt_logo.svg" alt="번개장터 로고">
+          <img src="/img/bgzt_logo.svg" alt="번개장터 로고">
         </a>
         <div id="navTopCenter">
           <div id="navInput">
@@ -40,11 +34,11 @@
         </div>
         <div id="navTopRight">
           <a href="/products/new" id="navSellLink">
-            <img src="./img/sell.png" alt="판매하기" id="navSellImg">
+            <img src="/img/sell.png" alt="판매하기" id="navSellImg">
             판매하기
           </a>
           <a href="/shop/products" id="navMyStoreLink">
-            <img src="./img/my_store.png" alt="내상점" id="navMyStoreImg">
+            <img src="/img/my_store.png" alt="내상점" id="navMyStoreImg">
             내상점
           </a>
         </div>
@@ -55,10 +49,10 @@
     <div id="authModal" class="modal">
       <div id="modalContent">
         <div id="modalHeader">
-          <img src="./img/closeIcon.png" alt="닫기 버튼" id="modalCloseBtn">
+          <img src="/img/closeIcon.png" alt="닫기 버튼" id="modalCloseBtn">
         </div>
         <div id="modalBody">
-          <img src="./img/bgzt_icon.svg" alt="번개장터" id="bgztIcon">
+          <img src="/img/bgzt_icon.svg" alt="번개장터" id="bgztIcon">
           <div id="modalTitle">번개장터로 중고거래 시작하기</div>
           <div id="modalDscrp">간편하게 가입하고 상품을 확인하세요</div>
           
@@ -102,14 +96,16 @@
 
     <!-- Main data -->
     <div id="main_data">
-
+      <div id="container">
+        hello
+      </div>
     </div>
   </div>
 
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	  <script type="module" src="./index.js"></script>
-    <script src="./js/member.js"></script>
-    <script src="./js/cart.js"></script>
+     <!-- URL : / -->
+     <script type="module" src="/js/main.js"></script>
+     <script type="module" src="/js/product-add.js"></script>
   </body>
 </html>

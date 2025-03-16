@@ -24,7 +24,6 @@ export async function logout() {
         sessionStorage.removeItem("nickname");
         sessionStorage.removeItem("Authorization");
         axios.defaults.headers.common['Authorization'] = ''; // Authorization 헤더에서 삭제       
-        window.location.reload();
     } catch (error) {
         console.error('Error logout:', error);
         throw error;
