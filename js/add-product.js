@@ -1,5 +1,70 @@
 const addProduct = () => {
     const main = document.getElementById("main");
+    main.innerHTML = `
+        <div id="productNewContainer">
+          <h2 id="productNewHeader">상품정보</h2>
+            <ul class="productNewUl">
+              <li class="productNewLi">
+                  <div class="productNewTitle" id="productNewImgTitle">
+                  상품이미지<small>(0/1)</small>
+                  </div>
+                  <div class="productNewContent">
+                  <div id="productNewImgInputWrapper">이미지 등록
+                      <input type="file" accept="image/jpg, image/jpeg, image/png" multiple id="productNewImgInput">
+                  </div>
+                  <div id="productNewImgDscrp">상품 이미지는 PC에서는 1:1, 모바일에서는 1:1.23 비율로 보여져요.</div>
+                  </div>
+              </li>
+            </ul>
+            <ul class="productNewUl">
+              <li class="productNewLi" id="productNewNameLi">
+                  <div class="productNewTitle" id="productNewNameTitle">상품명</div>
+                  <div class="productNewContent" id="productNewNameContent">
+                  <div class="productNewInputWrapper">
+                      <input type="text" class="productNewInput" placeholder="상품명을 입력해 주세요." id="productNewNameInput">
+                  </div>
+                  <div id="productNewTextLimit">0/40</div>
+                  </div>
+                </li>
+            </ul>
+            <ul class="productNewUl">
+              <li class="productNewLi" id="productNewCategoryLi">
+                <div class="productNewTitle" id="productNewCategoryTitle">카테고리</div>
+                <div class="productNewContent" id="productNewCategoryContent">
+                  <select id="productNewSelect">
+                  </select>
+                </div>
+              </li>
+            </ul>
+            <ul class="productNewUl" id="productNewDscrpUl">
+              <li class="productNewLi" id="productNewDscrpLi">
+                <div class="productNewTitle" id="productNewDscrpTitle">설명</div>
+                <div class="productNewContent" id="productNewDscrpContent">
+                    <textarea rows="6" id="productNewDscrpInput"></textarea>
+                    <div id="productNewDscrpLimit">0/2000</div>
+                </div>
+              </li>
+            </ul>
+
+            <h2 id="productNewHeader">가격</h2>
+            <ul class="productNewUl" id="productNewPriceUl">
+              <li class="productNewLi">
+                  <div class="productNewTitle" id="productNewPriceTitle">가격</div>
+                  <div class="productNewContent" id="productNewPriceContent">
+                    <div class="productNewInputWrapper" id="productNewPriceInputWrapper">
+                        <input type="text" class="productNewInput" id="productNewPriceInput" placeholder="가격을 입력해 주세요.">
+                        <span id="productNewSpan">원</span>
+                    </div>
+                  </div>
+              </li>
+            </ul>
+          </div>
+          <footer id="productNewFooter">
+            <div id="productNewRegisterButtonWrapper">
+              <button id="productNewRegisterButton">등록하기</button>
+            </div>
+          </footer>
+    `;
 
     let selected = "--";
     console.log("선택한 카테고리: " + selected);

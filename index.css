@@ -58,7 +58,7 @@ nav{
     position: sticky;
     left: 0px;
     top: 0px;
-    z-index: 10;
+    z-index: 1;
 }
 #navTop{
     width: 1024px;
@@ -145,7 +145,7 @@ nav{
 #authModal {
     display: none; /* 기본적으로 숨김 */
     position: fixed;
-    z-index: 1;
+    z-index: 1001;
     left: 0;
     top: 0;
     width: 100%;
