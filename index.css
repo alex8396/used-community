@@ -66,6 +66,7 @@ nav{
     width: 136px;
     height: 40px;
     margin-right: 100px;
+    display: flex;
 }
 #navTopCenter{
     width: 460px;

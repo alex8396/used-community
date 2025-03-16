@@ -4,10 +4,6 @@
     
     <!-- main.css -->
     <link rel="stylesheet" href="/index.css">
-    
-    <script type="module" src="/index.js"></script>
-
-   
 
     <title>번개장터</title>
     <link rel="icon" href="/img/bgzt_favicon.svg">
@@ -25,7 +21,7 @@
     <nav>
       <div id="navTop">
         <a href="/" id="logoLink">
-          <img src="/img/bgzt_logo.svg" alt="번개장터 로고">
+          <img src="/img/bgzt_logo.svg" alt="번개장터 로고" id="logoImg">
         </a>
         <div id="navTopCenter">
           <div id="navInput">
@@ -37,7 +33,7 @@
             <img src="/img/sell.png" alt="판매하기" id="navSellImg">
             판매하기
           </a>
-          <a href="/shop/products" id="navMyStoreLink">
+          <a href="/shop" id="navMyStoreLink">
             <img src="/img/my_store.png" alt="내상점" id="navMyStoreImg">
             내상점
           </a>
@@ -97,15 +93,17 @@
     <!-- Main data -->
     <div id="main_data">
       <div id="container">
-        hello
       </div>
     </div>
   </div>
 
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
      <!-- URL : / -->
-     <script type="module" src="/js/main.js"></script>
-     <script type="module" src="/js/product-add.js"></script>
+     <script type="module" src="/index.js"></script>
+     <script src="/js/main.js"></script>
+     <script src="/js/product-add.js"></script>
+     <script src="/js/shop.js"></script>
   </body>
 </html>

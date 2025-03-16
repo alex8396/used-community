@@ -1,4 +1,14 @@
+const main = () => {
+    const container = document.getElementById("container");
+    container.innerHTML = `<div>메인 페이지</div>`;
+};
+
 if (document.location.pathname === "/") {
-    const main_data = document.getElementById("main_data");
-    main_data.innerHTML = `<div>main</div>`;
+    main();
 }
+
+document.addEventListener("click", (e) => {
+    if (e.target.closest("#logoLink")) {
+        main();
+    }
+});

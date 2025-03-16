@@ -143,4 +143,5 @@ window.onload = async () => {
   });
 
   toggleLoginState(sessionStorage.getItem("Authorization"));
+
 };
