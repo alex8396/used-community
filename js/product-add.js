@@ -1,17 +1,24 @@
-const updateContent = () => {
-    const main_data = document.getElementById("main_data");
-    if (document.location.pathname === "/products/new") {
-        main_data.innerHTML = `<div>prodnew</div>`;
-    }
-    
+const productAdd = () => {
+    const container = document.getElementById("container");
+    container.innerHTML = `<div>판매하기 페이지</div>`;
 };
 
-// URL 변경 시 updateContent 실행
-window.addEventListener("popstate", updateContent);
+// 페이지 로딩 시 URL에 맞게 상태 초기화
+const initProductAdd = () => {
+    if (document.location.pathname === "/products/new") {
+        productAdd();
+    }
+};
 
-// a 태그 클릭 시 URL 변경 및 updateContent 실행
-document.getElementById('navSellLink').addEventListener('click', (event) => {
-    event.preventDefault();
-    
-    updateContent();
+// 초기화
+window.addEventListener("DOMContentLoaded", initProductAdd);
+
+document.addEventListener("click", (e) => {
+    if (e.target.closest("#navSellLink")) {
+        history.replaceState(null, null, "/products/new");  // replaceState로 URL 변경
+        productAdd();  // 페이지 렌더링
+    }
 });
+
+// popstate 이벤트 처리 (뒤로가기를 눌렀을 때 호출)
+window.addEventListener("popstate", initProductAdd);
