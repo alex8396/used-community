@@ -1,21 +1,8 @@
 import { signup, login, logout, getRecentReviews, insertReview, addToCart, getCartItems } from './api/api.js';
 
 window.onload = async () => {
-  // 모달
+  
   const modal = document.getElementById("authModal");
-  const openModalBtn = document.getElementById("authButton");
-  const closeModalBtn = document.getElementById("modalCloseBtn");
-
-  openModalBtn.onclick = () => {
-    modal.style.display = "flex";
-  };
-
-  closeModalBtn.onclick = () => {
-    modal.style.display = "none";
-    resetAuthForm();
-  };
-
-  // 로그인/회원가입
   const loginBtn = document.getElementById("modalLoginBtn");
   const signupBtn = document.getElementById("modalSignupBtn");
   const emailInput = document.getElementById("emailInput");
@@ -28,165 +15,43 @@ window.onload = async () => {
   const gotoLogin = document.getElementById("gotoLogin");
   const nicknameWrapper = document.getElementById("modalNicknameWrapper");
   const welcomeMessage = document.getElementById("welcomeMessage");
-  const nickname = document.getElementById("nickname");
-  const authButton = document.getElementById("authButton");
-  const logoutButton = document.getElementById("logoutButton");
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
   const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
 
-  // 로그인 버튼 클릭
-  loginBtn.onclick = async() => {
-    console.log("login누름")
-    if (!validateLoginForm()) return; // 유효성 검사 실패 시 종료
-    
-    // 버튼 비활성화 + 로딩 UI 추가
-    loginBtn.disabled = true;
-    loginBtn.innerHTML = `<span class="spinner"></span>`;
-    loginBtn.style.backgroundColor = "#e78787";
-    loginBtn.style.cursor = "default";
-  
-    try {
-      const response = await login(emailInput.value, passwordInput.value);
-      console.log(response);
-      if (response.data.status=="ok") {
-        modal.style.display = "none";
-        resetLoginButton();
-        console.log
-        const token = response.data.Authorization;
-        sessionStorage.setItem('Authorization', token);
-        sessionStorage.setItem('nickname', response.data.nickname);
-        axios.defaults.headers.common['Authorization'] = token;
-        nickname.innerHTML = response.data.nickname;
-        toggleLoginState(true);
-      } else {
-        alert(`${response.data.msg}`);
-        resetLoginButton();
-      }
-    } catch (error) {
-      console.error("로그인 오류:", error);
-      resetLoginButton();
-      alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");      
-    }
+  const toggleLoginState = (isLogin) => {
+    const sessionNickname = sessionStorage.getItem("nickname");
+    axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("Authorization");
+    const headerContent = document.getElementById("headerContent");
+    headerContent.innerHTML = isLogin
+      ? `<div id="logoutButton">로그아웃</div><div id="nickname">${sessionNickname}</div>`
+      : `<div id="authButton">로그인/회원가입</div>`;
   };
 
-  logoutButton.onclick = async() => {
-    logoutButton.disabled = true;
-    try {
-      await logout();
-      logoutButton.disabled = false;
-    } catch (error) {
-      console.error("로그아웃 오류:", error);
-      resetLoginButton();
-      alert("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");      
-      logoutButton.disabled = false;
-    }
+  const resetButton = (button, text) => {
+    button.disabled = false;
+    button.innerHTML = text;
+    button.style.backgroundColor = "#ef0e0e";
+    button.style.cursor = "pointer";
   };
 
-  // 회원가입 버튼 클릭
-  signupBtn.onclick = async () => {
-    if (!validateSignupForm()) return; // 유효성 검사 실패 시 종료
-  
-    // 버튼 비활성화 + 로딩 UI 추가
-    signupBtn.disabled = true;
-    signupBtn.innerHTML = `<span class="spinner"></span>`;
-    signupBtn.style.backgroundColor = "#e78787";
-    signupBtn.style.cursor = "default";
-  
-    try {
-      const response = await signup(emailInput.value, passwordInput.value, nicknameInput.value);
-      if (response.data=="회원 가입 성공") {
-        // 회원가입 성공 → 폼 숨기고 환영 메시지 표시
-        welcomeMessage.style.display = "flex";  // div를 보이게
-        resetSignupButton();
-      } else {
-        alert(`회원가입 실패: ${response.message}`);
-        resetSignupButton();
-      }
-    } catch (error) {
-      console.error("회원가입 오류:", error);
-      alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
-      resetSignupButton();
-    }
-  };
-
-  // 회원가입 화면으로 전환
-  gotoSignup.onclick = () => {
-    toggleAuthForm(true);
-  };
-
-  // 로그인 화면으로 전환
-  gotoLogin.onclick = () => {
-    toggleAuthForm(false);
-  };
-
-  const resetSignupButton = () => {
-    signupBtn.disabled = false;
-    signupBtn.innerHTML = `회원가입`;
-    signupBtn.style.backgroundColor = "#ef0e0e";
-    signupBtn.style.cursor = "pointer";
-  };
-  const resetLoginButton = () => {
-    loginBtn.disabled = false;
-    loginBtn.innerHTML = `로그인`;
-    loginBtn.style.backgroundColor = "#ef0e0e";
-    loginBtn.style.cursor = "pointer";
-  };
-
-  // 폼 유효성 검사 (로그인)
-  const validateLoginForm = () => {
+  const validateForm = (isSignup) => {
     let isValid = true;
-    if (!emailRegex.test(emailInput.value)) {
-      emailErrorMsg.innerHTML = `<div>유효하지 않은 이메일 형식이에요</div>`;
-      isValid = false;
-    } else {
-      emailErrorMsg.innerHTML = ``;
-    }
-
-    if (!passwordRegex.test(passwordInput.value)) {
-      passwordErrorMsg.innerHTML = `<div>비밀번호는 8자리 이상, 특수문자와 숫자를 포함해요</div>`;
-      isValid = false;
-    } else {
-      passwordErrorMsg.innerHTML = ``;
-    }
-
-    if (emailRegex.test(emailInput.value) && passwordRegex.test(passwordInput.value)) {
-      console.log("로그인 이메일:", emailInput.value);
-      console.log("로그인 비밀번호:", passwordInput.value);
-    }
-
-    return isValid;
+    emailErrorMsg.innerHTML = emailRegex.test(emailInput.value) ? "" : "유효하지 않은 이메일 형식이에요";
+    passwordErrorMsg.innerHTML = passwordRegex.test(passwordInput.value) ? "" : "비밀번호는 8자리 이상, 특수문자와 숫자를 포함해주세요";
+    nicknameErrorMsg.innerHTML = isSignup && nicknameInput.value.trim() === "" ? "닉네임을 입력해주세요" : "";
+    return emailErrorMsg.innerHTML === "" && passwordErrorMsg.innerHTML === "" && nicknameErrorMsg.innerHTML === "";
   };
 
-  // 폼 유효성 검사 (회원가입)
-  const validateSignupForm = () => {
-    let isValid = true;
-  
-    if (!emailRegex.test(emailInput.value)) {
-      emailErrorMsg.innerHTML = `<div>유효하지 않은 이메일 형식이에요</div>`;
-      isValid = false;
-    } else {
-      emailErrorMsg.innerHTML = ``;
-    }
-  
-    if (!passwordRegex.test(passwordInput.value)) {
-      passwordErrorMsg.innerHTML = `<div>비밀번호는 8자리 이상, 특수문자와 숫자를 포함해주세요</div>`;
-      isValid = false;
-    } else {
-      passwordErrorMsg.innerHTML = ``;
-    }
-  
-    if (nicknameInput.value.trim() === "") {
-      nicknameErrorMsg.innerHTML = `<div>닉네임을 입력해주세요</div>`;
-      isValid = false;
-    } else {
-      nicknameErrorMsg.innerHTML = ``;
-    }
-  
-    return isValid;
+  const resetAuthForm = () => {
+    emailErrorMsg.innerHTML = ``;
+    passwordErrorMsg.innerHTML = ``;
+    nicknameErrorMsg.innerHTML = ``;
+    emailInput.value = "";
+    passwordInput.value = "";
+    nicknameInput.value = "";
   };
 
-  // 로그인/회원가입 화면 전환
   const toggleAuthForm = (isSignup) => {
     nicknameWrapper.style.display = isSignup ? "flex" : "none";
     signupBtn.style.display = isSignup ? "block" : "none";
@@ -198,110 +63,84 @@ window.onload = async () => {
     resetAuthForm();
   };
 
-  // 폼 리셋
-  const resetAuthForm = () => {
-    emailErrorMsg.innerHTML = ``;
-    passwordErrorMsg.innerHTML = ``;
-    nicknameErrorMsg.innerHTML = ``;
-    emailInput.value = "";
-    passwordInput.value = "";
-    nicknameInput.value = "";
-  };
-
-  const handleEnterKey = (event) => {
-    // 엔터 키를 눌렀을 때만 기본 동작을 막음
-    if (event.key === "Enter") {
-      event.preventDefault();  // 새로고침 방지
-  
-      if (document.activeElement === emailInput || document.activeElement === passwordInput || document.activeElement === nicknameInput) {
-        if (signupBtn.style.display === "block") {
-          signupBtn.click();  // 회원가입 버튼 클릭
-        } else if (loginBtn.style.display === "block") {
-          loginBtn.click();  // 로그인 버튼 클릭
-        }
+  const handleAuthAction = async (event) => {
+    const targetId = event.target.id;
+    if (targetId === "logoutButton") {
+      event.target.disabled = true;
+      try {
+        await logout();
+        sessionStorage.clear();
+        toggleLoginState(false);
+      } catch (error) {
+        console.error("로그아웃 오류:", error);
+        alert("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");
       }
+      event.target.disabled = false;
     }
-    // 다른 키는 기본 동작을 허용 (영어 입력 등)
-  };
-
-  // 엔터키 입력 감지
-  document.addEventListener("keydown", handleEnterKey);
-
-  window.onclick = (event) => {
-    if (event.target === modal) {
+    if (targetId === "authButton") modal.style.display = "flex";
+    if (targetId === "authModal") {
       modal.style.display = "none";
       resetAuthForm();
     }
+    if (targetId === "modalCloseBtn"){
+      modal.style.display = "none";
+      resetAuthForm();
+    }
+    if (targetId === "modalLoginBtn" || targetId === "modalSignupBtn") {
+      if (!validateForm(targetId === "modalSignupBtn")) return;
+      event.target.disabled = true;
+      event.target.innerHTML = `<span class="spinner"></span>`;
+      event.target.style.backgroundColor = "#e78787";
+      try {
+        if (targetId === "modalLoginBtn") {
+          const response = await login(emailInput.value, passwordInput.value);
+          if (response.data.status === "ok") {
+            sessionStorage.setItem("Authorization", response.data.Authorization);
+            sessionStorage.setItem("nickname", response.data.nickname);
+            axios.defaults.headers.common["Authorization"] = response.data.Authorization;
+            toggleLoginState(true);
+            modal.style.display = "none";
+            resetAuthForm();
+          } else alert(response.data.msg);
+        } else {
+          const response = await signup(emailInput.value, passwordInput.value, nicknameInput.value);
+          if (response.data === "회원 가입 성공") welcomeMessage.style.display = "flex";
+          else alert(`회원가입 실패: ${response.message}`);
+        }
+      } catch (error) {
+        console.error("인증 오류:", error);
+        alert("오류가 발생했습니다. 다시 시도해주세요.");
+      }
+      resetButton(event.target, targetId === "modalLoginBtn" ? "로그인" : "회원가입");
+    }
+    if(targetId === "gotoSignup"){
+      toggleAuthForm(true);
+    }
+    if(targetId === "gotoLogin"){
+      toggleAuthForm(false);
+    }
   };
-  window.addEventListener("keydown", (event) => {
+
+  document.addEventListener("click", handleAuthAction);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (loginBtn.style.display === "block") loginBtn.click();
+      if (signupBtn.style.display === "block") signupBtn.click();
+    }
     if (event.key === "Escape") {
-      modal.style.display = "none";
-      resetAuthForm();
+      if (modal.style.display === "flex") {
+        modalCloseBtn.click();
+      }
     }
   });
 
-  const toggleLoginState = (isLogin) => {
-    nickname.innerHTML = sessionStorage.getItem('nickname');
-    nickname.style.display = isLogin ? "flex" : "none";
-    authButton.style.display = isLogin ? "none" : "flex";
-    logoutButton.style.display = isLogin ? "flex" : "none";
-  }
-  const auth = sessionStorage.getItem('Authorization');
-  if(auth){
-    toggleLoginState(true);
-    axios.defaults.headers.common['Authorization'] = auth;
-
-  }else{
-    toggleLoginState(false);
-  }
-
-
-
-
-
-
-  // 제품 목록 및 리뷰 처리
-  try {
-    const productList = await getAllProducts();
-    let productListDiv = ``;
-
-    productList.forEach((item) => {
-      productListDiv += `
-        <div class="card m-3" style="width: 10rem;">
-          <img src="img/${item.pimg}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <b class="card-title">${item.prodname}</b>
-            <a href="#" class="review-link" data-product-id="${item.prodcode}" 
-            data-bs-toggle="modal" data-bs-target="#commentModal"> 
-              <img src="img/comment.png" alt="댓글"> 
-            </a>
-            <p class="card-text text-danger">${item.price}원</p>   
-            <a href="#" class="btn btn-outline-info" onclick="addToCart(${item.prodcode})">찜</a>
-            <a href="#" class="btn btn-outline-info" onclick="buyProduct(${item.prodcode})">구매</a>
-          </div>
-        </div>`;
+  document.querySelectorAll("a").forEach(anchor => {
+    anchor.addEventListener("click", (event) => {
+      event.preventDefault();
+      history.pushState(null, null, anchor.getAttribute("href"));
     });
+  });
 
-    document.getElementById("productListDiv").innerHTML = productListDiv;
-
-    // 모달 열기 이벤트 리스너
-    const reviewLinks = document.querySelectorAll(".review-link");
-    reviewLinks.forEach((link) => {
-      link.addEventListener("click", async (event) => {
-        const prodcode = link.getAttribute("data-product-id");
-        try {
-          const reviews = await getRecentReviews(prodcode);
-          let reviewListDiv = `<ul>`;
-          reviewListDiv += reviews.map((item) => `<li>${item.review}</li>`).join("");
-          reviewListDiv += `</ul>`;
-          document.getElementById("commentModalBody").innerHTML = reviewListDiv;
-        } catch (error) {
-          document.getElementById("commentModalBody").innerHTML = "댓글을 불러오는 데 오류가 발생했습니다.";
-        }
-      });
-    });
-
-  } catch (error) {
-    console.error('Error fetching product list:', error);
-  }
+  toggleLoginState(sessionStorage.getItem("Authorization"));
 };

@@ -17,7 +17,6 @@ header{
     justify-content: end;
 }
 #authButton{
-    display: none;
     height: 39px;
     padding: 0 15px;
     font-size: 14px;
@@ -29,7 +28,6 @@ header{
     cursor: pointer;
 }
 #logoutButton{
-    display: none;
     height: 39px;
     padding: 0 15px;
     font-size: 14px;
@@ -321,4 +319,10 @@ nav{
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9999;
+}
+
+#main_data{
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
