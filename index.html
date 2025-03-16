@@ -2,8 +2,9 @@
 <html lang="en">
   <head>
     
-    <!-- main.css -->
+    <!-- css -->
     <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/css/add-product.css">
 
     <title>번개장터</title>
     <link rel="icon" href="/img/bgzt_favicon.svg">
@@ -26,6 +27,9 @@
         <div id="navTopCenter">
           <div id="navInput">
             <input type="text" placeholder="상품명 입력">
+            <a id="searchIconWrapper">
+              <img src="/img/searchIcon.png" alt="검색" id="searchIcon">
+            </a>
           </div>
         </div>
         <div id="navTopRight">
@@ -92,9 +96,14 @@
 
     <!-- Main data -->
     <div id="main_data">
-      <div id="container">
-      </div>
+      <main id="main">
+        
+      </main>
     </div>
+  </div>
+
+  <div class="footer-content">
+    <p>&copy; 2025 Ureca MiniProject Team 12. All Rights Reserved.</p>
   </div>
 
 
@@ -103,7 +112,7 @@
      <!-- URL : / -->
      <script type="module" src="/index.js"></script>
      <script src="/js/main.js"></script>
-     <script src="/js/product-add.js"></script>
+     <script src="/js/add-product.js"></script>
      <script src="/js/shop.js"></script>
   </body>
 </html>

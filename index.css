@@ -51,9 +51,14 @@ header{
 nav{
     height: 145px;
     padding-top: 35px;
+    background-color: white;
     border-bottom: 1px solid rgb(231, 231, 231);
     display: flex;
     justify-content: center;
+    position: sticky;
+    left: 0px;
+    top: 0px;
+    z-index: 1;
 }
 #navTop{
     width: 1024px;
@@ -69,12 +74,12 @@ nav{
     display: flex;
 }
 #navTopCenter{
-    width: 460px;
-    height: 40px;
+    width: 456px;
+    height: 36px;
     border: 2px solid rgb(247, 47, 51);;
 }
 #navInput{
-    width: 456px;
+    width: 426px;
     height: 36px;
     padding: 0 15px;
     display: flex;
@@ -88,6 +93,15 @@ nav{
     font-size: 14px;
     color: #595959;
     outline: none;
+}
+#searchIconWrapper{
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+#searchIcon{
+    width: 16px;
+    height: 16px;
 }
 #navTopRight{
     width: 214px;
@@ -131,7 +145,7 @@ nav{
 #authModal {
     display: none; /* 기본적으로 숨김 */
     position: fixed;
-    z-index: 1;
+    z-index: 1001;
     left: 0;
     top: 0;
     width: 100%;
@@ -326,4 +340,11 @@ nav{
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+.footer-content{
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
