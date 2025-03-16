@@ -1,32 +1,8 @@
 const addProduct = () => {
     const main = document.getElementById("main");
-    main.innerHTML = `
-        <h2 id="productNewHeader">상품정보</h2>
-            <ul class="productNewUl">
-            <li class="productNewLi">
-                <div class="productNewTitle" id="productNewImgTitle">
-                상품이미지<small>(0/1)</small>
-                </div>
-                <div class="productNewContent">
-                <div id="productNewImgInputWrapper">이미지 등록
-                    <input type="file" accept="image/jpg, image/jpeg, image/png" multiple id="productNewImgInput">
-                </div>
-                <div id="productNewImgDscrp">상품 이미지는 PC에서는 1:1, 모바일에서는 1:1.23 비율로 보여져요.</div>
-                </div>
-            </li>
-            </ul>
-            <ul class="productNewUl">
-            <li class="productNewLi">
-                <div class="productNewTitle" id="productNewNameTitle">상품명</div>
-                <div class="productNewContent" id="productNewNameContent">
-                <div id="productNewNameInputWrapper">
-                    <input type="text" id="productNewNameInput" placeholder="상품명을 입력해 주세요.">
-                </div>
-                <div id="productNewTextLimit">0/40</div>
-                </div>
-            </li>
-        </ul>
-    `;
+    // main.innerHTML = `
+        
+    // `;
 
     const inputElement = document.getElementById("productNewNameInput");
     const inputCount = document.getElementById("productNewTextLimit");
@@ -36,6 +12,37 @@ const addProduct = () => {
         }
         const inputLength = inputElement.value.length;
         inputCount.innerHTML = `${inputLength}/40`;
+    });
+
+    const categories = [
+        "선택", "여성의류", "남성의류", "신발", "가방/지갑", "시계", "쥬얼리", "패션 액세서리",
+        "여성의류", "디지털", "가전제품", "스포츠/레저", "차량/오토바이", "스타굿즈", 
+        "키덜트", "예술/희귀/수집품", "음반/악기", "도서/티켓/문구", "뷰티/미용", 
+        "가구/인테리어", "생활/주방용품", "공구/산업용품", "식품", "유아동/출산", 
+        "반려동물용품", "기타", "재능"
+    ];
+    const selectElement = document.getElementById("productNewSelect");
+    categories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    selectElement.appendChild(option);
+    });
+    let selected = "--";
+    console.log("선택한 카테고리: " + selected);
+    selectElement.addEventListener("change", () => {
+        selected = selectElement.value
+        console.log("선택한 카테고리: " + selected);
+    });
+
+    const textareaElement = document.getElementById("productNewDscrpInput");
+    const textareaCount = document.getElementById("productNewDscrpLimit");
+    textareaElement.addEventListener("input", () => {
+        if (textareaElement.value.length > 40) {
+            textareaElement.value = textareaElement.value.slice(0, 2000); // 2000자 제한
+        }
+        const inputLength = textareaElement.value.length;
+        textareaCount.innerHTML = `${inputLength}/2000`;
     });
 };
 
