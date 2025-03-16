@@ -69,12 +69,12 @@ nav{
     display: flex;
 }
 #navTopCenter{
-    width: 460px;
-    height: 40px;
+    width: 456px;
+    height: 36px;
     border: 2px solid rgb(247, 47, 51);;
 }
 #navInput{
-    width: 456px;
+    width: 426px;
     height: 36px;
     padding: 0 15px;
     display: flex;
@@ -88,6 +88,15 @@ nav{
     font-size: 14px;
     color: #595959;
     outline: none;
+}
+#searchIconWrapper{
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+#searchIcon{
+    width: 16px;
+    height: 16px;
 }
 #navTopRight{
     width: 214px;

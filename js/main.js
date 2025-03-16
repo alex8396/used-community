@@ -1,6 +1,6 @@
 const main = () => {
-    const container = document.getElementById("container");
-    container.innerHTML = `<div>메인 페이지</div>`;
+    const main = document.getElementById("main");
+    main.innerHTML = `<div>메인 페이지</div>`;
 };
 
 // 페이지 로딩 시 URL에 맞게 상태 초기화
