@@ -111,8 +111,19 @@ window.onload = async () => {
           } else alert(response.data.msg);
         } else {
           const response = await signup(emailInput.value, passwordInput.value, nicknameInput.value);
-          if (response.data === "회원 가입 성공") welcomeMessage.style.display = "flex";
-          else alert(`회원가입 실패: ${response.message}`);
+          if (response.data === "회원 가입 성공") {
+            welcomeMessage.style.display = "flex";
+          }else if(response.data === "이메일 중복, 닉네임 중복"){
+            emailErrorMsg.innerHTML = `이미 가입된 이메일입니다.`;
+            nicknameErrorMsg.innerHTML = `이미 사용중인 닉네임입니다.`;
+          }else if(response.data === "이메일 중복"){
+            emailErrorMsg.innerHTML = `이미 가입된 이메일입니다.`;
+          }else if(response.data === "닉네임 중복"){
+            nicknameErrorMsg.innerHTML = `이미 사용중인 닉네임입니다.`;
+            
+          }else{
+            alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+          }
         }
       } catch (error) {
         console.error("인증 오류:", error);
