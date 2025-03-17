@@ -1,4 +1,4 @@
-import { signup, login, logout, getRecentReviews, insertReview, addToCart, getCartItems } from './api/api.js';
+import { signup, login, logout } from '/api/api.js';
 
 window.onload = async () => {
   

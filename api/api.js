@@ -29,6 +29,37 @@ export async function logout() {
         throw error;
     }
 }
+export async function insertProduct(name, category, description, price, images, nickname) {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("category", category);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("nickname", nickname);
+
+    // 이미지들을 FormData에 추가
+    Array.from(images).forEach(image => {
+        formData.append("images", image);  // "images"라는 이름으로 파일을 추가
+    });
+
+    try {
+        const response = await axios.post(`${URL}/products/new`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"  // 멀티파트 요청 헤더
+            }
+        });
+        return response;
+    } catch (error) {
+        console.error("Error adding product:", error);
+        throw error;
+    }
+}
+
+
+
+
+
+
 
 // 특정 제품에 대한 리뷰를 가져오는 함수
 export async function getRecentReviews(prodcode) {
