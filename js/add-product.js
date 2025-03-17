@@ -6,13 +6,15 @@ const addProduct = () => {
             <ul class="productNewUl">
               <li class="productNewLi">
                   <div class="productNewTitle" id="productNewImgTitle">
-                  상품이미지<small>(0/1)</small>
+                  상품이미지<small>(0/3)</small>
                   </div>
-                  <div class="productNewContent">
-                  <div id="productNewImgInputWrapper">이미지 등록
-                      <input type="file" accept="image/jpg, image/jpeg, image/png" multiple id="productNewImgInput">
-                  </div>
-                  <div id="productNewImgDscrp">상품 이미지는 PC에서는 1:1, 모바일에서는 1:1.23 비율로 보여져요.</div>
+                  <div class="productNewContent" id="productNewImgContent">
+                    <div id="productNewImgContainer">
+                        <div id="productNewImgInputWrapper">이미지 등록
+                            <input type="file" accept="image/jpg, image/jpeg, image/png" multiple id="productNewImgInput">
+                        </div>
+                    </div>
+                    <div id="productNewImgDscrp">상품 이미지는 PC에서는 1:1, 모바일에서는 1:1.23 비율로 보여져요.</div>
                   </div>
               </li>
             </ul>
@@ -76,7 +78,6 @@ const addProduct = () => {
         "가구/인테리어", "생활/주방용품", "공구/산업용품", "식품", "유아동/출산", 
         "반려동물용품", "기타", "재능"
     ];
-
     // 카테고리 옵션 생성
     categories.forEach(category => {
         const option = document.createElement("option");
@@ -84,12 +85,83 @@ const addProduct = () => {
         option.textContent = category;
         selectElement.appendChild(option);
     });
-
     // select에 change 이벤트 리스너 한 번만 추가
     selectElement.addEventListener("change", () => {
         selected = selectElement.value;
         console.log("선택한 카테고리: " + selected);
     });
+
+    document.addEventListener("change", (event) => {
+        if (event.target.id === "productNewImgInput") {
+            const previewContainer = document.getElementById("productNewImgContainer");
+            const files = event.target.files;
+    
+            let currentImgCount = previewContainer.getElementsByTagName("img").length; // 현재 이미지 개수
+    
+            // 현재 이미지 개수와 선택한 파일 수를 비교하여 최대 3개로 제한
+            const filesToAdd = Array.from(files).slice(0, 3 - currentImgCount); // 최대 추가할 수 있는 파일 수만큼 슬라이싱
+    
+            if (filesToAdd.length === 0) {
+                alert("이미지는 최대 3개까지만 추가할 수 있습니다.");
+                return; // 3개 이상이면 더 이상 처리하지 않음
+            }
+    
+            filesToAdd.forEach((file, index) => {
+                if (!file.type.match("image/(jpeg|jpg|png)")) {
+                    alert(`"${file.name}"은(는) 유효한 이미지 파일이 아닙니다.`);
+                    return;
+                }
+    
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // 새로운 div 요소 생성
+                    const div = document.createElement("div");
+                    div.id = "productNewImgDiv";
+                    div.style.marginRight = currentImgCount === 2 ? "0px" : "16px";
+    
+                    // 이미지 요소 생성
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.alt = `미리보기 ${index + 1}`;
+                    img.id = "productNewImg";
+    
+                    // 삭제 버튼 생성
+                    const button = document.createElement("button");
+                    button.id = "productNewImgClose";
+                    button.classList = "productNewImgClose";
+                    button.addEventListener("click", () => {
+                        const parentDiv = button.parentElement; // 부모 요소 가져오기
+                        parentDiv.remove(); // 부모 요소 삭제
+                        updateImageCount();
+                    });
+    
+                    // div에 이미지와 버튼 추가
+                    div.appendChild(img);
+                    div.appendChild(button);
+    
+                    // previewContainer에 추가
+                    previewContainer.appendChild(div);
+                    currentImgCount++; // 현재 이미지 개수 증가
+    
+                    // small 태그 업데이트 (DOM에 요소가 추가된 후)
+                    updateImageCount();
+                };
+    
+                reader.readAsDataURL(file);
+            });
+    
+            // 이미지 개수 업데이트 함수
+            function updateImageCount() {
+                const smallTag = document.querySelector("small");
+                const childrenCount = previewContainer.querySelectorAll("#productNewImgDiv").length; // 실제 이미지 div 개수
+                smallTag.innerHTML = `(${childrenCount}/3)`;
+            }
+        }
+    });
+    
+    
+    
+    
 
     // 전체 document에 click 이벤트 리스너 추가
     document.addEventListener("click", (e) => {

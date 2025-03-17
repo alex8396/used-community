@@ -36,12 +36,19 @@ window.onload = async () => {
   };
 
   const validateForm = (isSignup) => {
-    let isValid = true;
     emailErrorMsg.innerHTML = emailRegex.test(emailInput.value) ? "" : "유효하지 않은 이메일 형식이에요";
-    passwordErrorMsg.innerHTML = passwordRegex.test(passwordInput.value) ? "" : "비밀번호는 8자리 이상, 특수문자와 숫자를 포함해주세요";
-    nicknameErrorMsg.innerHTML = isSignup && nicknameInput.value.trim() === "" ? "닉네임을 입력해주세요" : "";
+    
+    passwordErrorMsg.innerHTML = passwordRegex.test(passwordInput.value) 
+        ? "" 
+        : `비밀번호는 8자리 이상, 특수문자와 숫자를 포함${isSignup ? "해주세요" : "해요"}`;
+
+    nicknameErrorMsg.innerHTML = isSignup && nicknameInput.value.trim() === "" 
+        ? "닉네임을 입력해주세요" 
+        : "";
+
     return emailErrorMsg.innerHTML === "" && passwordErrorMsg.innerHTML === "" && nicknameErrorMsg.innerHTML === "";
-  };
+};
+
 
   const resetAuthForm = () => {
     emailErrorMsg.innerHTML = ``;
