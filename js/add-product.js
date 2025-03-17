@@ -128,6 +128,12 @@ const addProduct = () => {
                     // 삭제 버튼 생성
                     const button = document.createElement("button");
                     button.id = "productNewImgClose";
+                    button.classList = "productNewImgClose";
+                    button.addEventListener("click", () => {
+                        const parentDiv = button.parentElement; // 부모 요소 가져오기
+                        parentDiv.remove(); // 부모 요소 삭제
+                        updateImageCount();
+                    });
     
                     // div에 이미지와 버튼 추가
                     div.appendChild(img);
