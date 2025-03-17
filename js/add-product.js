@@ -1,3 +1,5 @@
+import { insertProduct } from '/api/api.js';
+
 const addProduct = () => {
     const main = document.getElementById("main");
     main.innerHTML = `
@@ -68,8 +70,6 @@ const addProduct = () => {
           </footer>
     `;
 
-    let selected = "--";
-    console.log("선택한 카테고리: " + selected);
     const selectElement = document.getElementById("productNewSelect");
     const categories = [
         "선택", "여성의류", "남성의류", "신발", "가방/지갑", "시계", "쥬얼리", "패션 액세서리",
@@ -85,11 +85,6 @@ const addProduct = () => {
         option.textContent = category;
         selectElement.appendChild(option);
     });
-    // select에 change 이벤트 리스너 한 번만 추가
-    selectElement.addEventListener("change", () => {
-        selected = selectElement.value;
-        console.log("선택한 카테고리: " + selected);
-    });
 
     document.addEventListener("change", (event) => {
         if (event.target.id === "productNewImgInput") {
@@ -98,12 +93,11 @@ const addProduct = () => {
     
             let currentImgCount = previewContainer.getElementsByTagName("img").length; // 현재 이미지 개수
     
-            // 현재 이미지 개수와 선택한 파일 수를 비교하여 최대 3개로 제한
             const filesToAdd = Array.from(files).slice(0, 3 - currentImgCount); // 최대 추가할 수 있는 파일 수만큼 슬라이싱
     
             if (filesToAdd.length === 0) {
                 alert("이미지는 최대 3개까지만 추가할 수 있습니다.");
-                return; // 3개 이상이면 더 이상 처리하지 않음
+                return;
             }
     
             filesToAdd.forEach((file, index) => {
@@ -114,47 +108,52 @@ const addProduct = () => {
     
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    // 새로운 div 요소 생성
                     const div = document.createElement("div");
                     div.id = "productNewImgDiv";
+    
+                    // margin-right를 이미지 개수에 따라 결정
                     div.style.marginRight = currentImgCount === 2 ? "0px" : "16px";
     
-                    // 이미지 요소 생성
                     const img = document.createElement("img");
                     img.src = e.target.result;
                     img.alt = `미리보기 ${index + 1}`;
                     img.id = "productNewImg";
     
-                    // 삭제 버튼 생성
                     const button = document.createElement("button");
                     button.id = "productNewImgClose";
                     button.classList = "productNewImgClose";
                     button.addEventListener("click", () => {
-                        const parentDiv = button.parentElement; // 부모 요소 가져오기
-                        parentDiv.remove(); // 부모 요소 삭제
+                        const parentDiv = button.parentElement;
+                        parentDiv.remove();
                         updateImageCount();
                     });
     
-                    // div에 이미지와 버튼 추가
                     div.appendChild(img);
                     div.appendChild(button);
-    
-                    // previewContainer에 추가
                     previewContainer.appendChild(div);
-                    currentImgCount++; // 현재 이미지 개수 증가
+                    currentImgCount++; // 이미지 추가 후 개수 증가
     
-                    // small 태그 업데이트 (DOM에 요소가 추가된 후)
+                    // 이미지 개수 및 margin-right 업데이트
                     updateImageCount();
                 };
     
                 reader.readAsDataURL(file);
             });
     
-            // 이미지 개수 업데이트 함수
             function updateImageCount() {
                 const smallTag = document.querySelector("small");
-                const childrenCount = previewContainer.querySelectorAll("#productNewImgDiv").length; // 실제 이미지 div 개수
+                const childrenCount = previewContainer.querySelectorAll("#productNewImgDiv").length;
                 smallTag.innerHTML = `(${childrenCount}/3)`;
+    
+                // 각 이미지 div의 margin-right 업데이트
+                const imageDivs = previewContainer.querySelectorAll("#productNewImgDiv");
+                imageDivs.forEach((div, index) => {
+                    if (index === imageDivs.length - 1) {
+                        div.style.marginRight = "0"; // 마지막 이미지는 margin-right 0
+                    } else {
+                        div.style.marginRight = "16px"; // 나머지 이미지는 margin-right 16px
+                    }
+                });
             }
         }
     });
@@ -162,9 +161,12 @@ const addProduct = () => {
     
     
     
+    
+    
+    
 
     // 전체 document에 click 이벤트 리스너 추가
-    document.addEventListener("click", (e) => {
+    document.addEventListener("click", async(e) => {
         // productNewNameInput을 클릭한 경우
         if (e.target.id === "productNewNameInput") {
             const inputElement = e.target;
@@ -217,6 +219,66 @@ const addProduct = () => {
                 e.target.value = value;  // 수정된 값으로 input 업데이트
             });
         }
+
+        // 등록하기 클릭한 경우
+        if (e.target.id === "productNewRegisterButton") {
+            const name = document.getElementById("productNewNameInput").value.trim();
+            const category = document.getElementById("productNewSelect").value;
+            const description = document.getElementById("productNewDscrpInput").value.trim();
+            const price = document.getElementById("productNewPriceInput").value.trim().replace(/,/g, ""); // 쉼표 제거
+            const fileInput = document.getElementById("productNewImgInput");
+            const imageFiles = fileInput.files;  // 선택된 이미지 파일들을 가져옴
+        
+            // 필수 입력 항목 검사
+            if (!name) {
+                alert("상품명을 입력해 주세요.");
+                return;
+            }
+            if (category === "선택") {
+                alert("카테고리를 선택해 주세요.");
+                return;
+            }
+            if (!description) {
+                alert("상품 설명을 입력해 주세요.");
+                return;
+            }
+            if (!price || isNaN(price) || parseInt(price) <= 0) {
+                alert("올바른 가격을 입력해 주세요.");
+                return;
+            }
+            if (imageFiles.length === 0) {
+                alert("상품 사진을 등록해 주세요.");
+                return;
+            }
+        
+            const nickname = sessionStorage.getItem("nickname");
+        
+            // 버튼을 비활성화하고 로딩 표시 추가
+            const registerButton = e.target;
+            registerButton.disabled = true;
+            registerButton.innerHTML = `<span class="spinner"></span>`;
+            registerButton.style.backgroundColor = "#e78787";  // 비활성화된 버튼 색상
+        
+            try {
+                const response = await insertProduct(name, category, description, price, imageFiles, nickname);
+                console.log(response);
+                if (response.data.status === "ok") {
+                    alert("상품이 등록되었습니다");
+                    window.location.reload();
+                } else {
+                    alert("상품 등록에 실패했습니다. 다시 시도해주세요");
+                }
+            } catch (error) {
+                alert("서버와의 통신 중 오류가 발생했습니다. 다시 시도해주세요.");
+            } finally {
+                // 작업 끝나면 버튼 활성화하고 원래 상태로 되돌리기
+                registerButton.disabled = false;
+                registerButton.innerHTML = "등록하기";
+                registerButton.style.backgroundColor = "#ef0e0e";  // 원래 버튼 색상
+            }
+        }
+        
+        
     });
 };
 
