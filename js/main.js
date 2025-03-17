@@ -1,7 +1,36 @@
-const main = () => {
+import { getAllProducts } from '/api/api.js';
+
+const main = async () => {
     const main = document.getElementById("main");
-    main.innerHTML = `<div>메인 페이지</div>`;
+
+    try {
+        const response = await getAllProducts();
+        
+        if (response.data.status === "ok") {
+            console.log(response.data.products)
+            const products = response.data.products;
+            let productHTML = ""; // 제품 리스트 HTML 문자열
+
+            products.forEach(product => {
+                productHTML += `
+                    <div class="product">
+                        <img src="${product.imagePaths}" alt="${product.name}" style="width : 200px; height: 200px;"/>
+                        <div>${product.name}</div>
+                        <div>가격: ${product.price}원</div>
+                    </div>
+                `;
+            });
+
+            main.innerHTML += productHTML; // 제품 리스트 HTML 삽입
+        } else {
+            main.innerHTML += `<p>상품 목록을 불러오는 데 실패했습니다.</p>`;
+        }
+    } catch (error) {
+        console.error(error);
+        main.innerHTML += `<p>오류가 발생했습니다.</p>`;
+    }
 };
+
 
 // 페이지 로딩 시 URL에 맞게 상태 초기화
 const initMain = () => {
