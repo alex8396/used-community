@@ -164,8 +164,8 @@ window.onload = async () => {
 
 };
 
-  // 유틸리티
-  function getCookie(cname) {
+// 유틸리티 함수들
+function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(";");
@@ -179,16 +179,15 @@ window.onload = async () => {
       }
     }
     return "";
-  }
+}
   
-  function removeCookie(cname) {
+function removeCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  }
+}
   
-    Authorization = getCookie("Authorization");
-    email = getCookie("email");
-    if (Authorization && email) {
-    //   axios.defaults.headers.common["Authorization"] = Authorization; // Authorization 헤더 설정
-      document.getElementById("loginSpan").innerHTML = `${email}  
-      <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>`;
-    }
+Authorization = getCookie("Authorization");
+email = getCookie("email");
+if (Authorization && email) {
+    document.getElementById("loginSpan").innerHTML = `${email}  
+    <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>`;
+}
