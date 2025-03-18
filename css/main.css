@@ -8,3 +8,106 @@
     height: 276px;
     margin: 0 11px 11px 0;
 }
+body {
+    font-family: Arial, sans-serif;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 1024px;
+    margin: auto;
+    padding: 0 20px;
+    justify-content: space-between;
+}
+.product-card {
+    flex: 0 0 calc(20% - 13px);
+    min-width: 170px;
+    max-width: 190px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 12px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+.product-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 8px;
+}
+.price-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.heart-icon {
+    width: 24px;
+    height: 24px;
+    stroke: #333;  /* 검정 테두리 */
+    fill: white;   /* 하얀색 배경 */
+    transition: all 0.2s ease;
+}
+.like-button:hover .heart-icon {
+    transform: scale(1.1);
+}
+.like-button.active .heart-icon {
+    fill: #ff4b4b;    /* 빨간색 채우기 */
+    stroke: #ff4b4b;  /* 빨간색 테두리 */
+}
+.product-price {
+    margin: 0;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+}
+.product-time {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+.product-title {
+    text-align: left;
+    margin: 12px 0;
+    font-size: 15px;
+}
+@media (max-width: 1024px) {
+    .product-card {
+        flex: 0 0 calc(25% - 12px);
+    }
+}
+@media (max-width: 768px) {
+    .product-card {
+        flex: 0 0 calc(33.333% - 11px);
+    }
+}
+@media (max-width: 576px) {
+    .product-card {
+        flex: 0 0 calc(50% - 8px);
+    }
+}
