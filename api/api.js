@@ -2,7 +2,7 @@ const URL = "http://localhost:8080";
 
 export async function signup( email, pwd, nickname) {
     try {
-        const response = await axios.post(`${URL}/signup`, { email, pwd, nickname});
+        const response = await axios.post(`${URL}/api/signup`, { email, pwd, nickname});
         return response;
     } catch (error) {
         console.error('Error signup:', error);
@@ -11,7 +11,7 @@ export async function signup( email, pwd, nickname) {
 }
 export async function login( email, pwd) {
     try {
-        const response = await axios.post(`${URL}/login`, { email, pwd});
+        const response = await axios.post(`${URL}/api/login`, { email, pwd});
         return response;
     } catch (error) {
         console.error('Error login:', error);
@@ -20,7 +20,7 @@ export async function login( email, pwd) {
 }
 export async function logout() {
     try {
-        await axios.post(`${URL}/logout`);
+        await axios.post(`${URL}/api/logout`);
         sessionStorage.removeItem("nickname");
         sessionStorage.removeItem("Authorization");
         axios.defaults.headers.common['Authorization'] = ''; // Authorization 헤더에서 삭제       
@@ -43,7 +43,7 @@ export async function insertProduct(name, category, description, price, images, 
     });
 
     try {
-        const response = await axios.post(`${URL}/products/new`, formData, {
+        const response = await axios.post(`${URL}/api/products/new`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"  // 멀티파트 요청 헤더
             }
@@ -56,7 +56,7 @@ export async function insertProduct(name, category, description, price, images, 
 }
 export async function getAllProducts() {
     try {
-        const response = await axios.get(`${URL}/products`);
+        const response = await axios.get(`${URL}/api/products`);
         return response;
     } catch (error) {
         console.error('Error get all products:', error);
