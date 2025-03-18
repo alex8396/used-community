@@ -189,10 +189,11 @@ window.onload = async () => {
       
       try {
         // API 호출 예시
-        // await toggle
+        console.log(`상품 ${productId} 찜하기 ${isLiked ? '추가' : '취소'}`);
       } catch (error) {
-        console.error("찜하기 오류:", error);
-        alert("찜하기 중 오류가 발생했습니다. 다시 시도해주세요.");
+        console.error('찜하기 처리 중 오류 발생:', error);
+        // 에러 발생 시 토글 되돌리기
+        this.classList.toggle('active');
       }
     });
   });
