@@ -175,6 +175,28 @@ window.onload = async () => {
     });
   });
 
+  // 찜하기 버튼 이벤트 처리
+  document.querySelectorAll('.like-button').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation(); // 상품 카드 클릭 이벤트 전파 방지
+      
+      // 버튼 상태 토글
+      this.classList.toggle('active');
+      
+      // 여기에 찜하기 API 호출 로직 추가
+      const productId = this.closest('.product-card').dataset.productId;
+      const isLiked = this.classList.contains('active');
+      
+      try {
+        // API 호출 예시
+        // await toggle
+      } catch (error) {
+        console.error("찜하기 오류:", error);
+        alert("찜하기 중 오류가 발생했습니다. 다시 시도해주세요.");
+      }
+    });
+  });
+
 };
 
 // 유틸리티 함수들
@@ -198,8 +220,8 @@ function removeCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
   
-Authorization = getCookie("Authorization");
-email = getCookie("email");
+const Authorization = getCookie("Authorization");
+const email = getCookie("email");
 if (Authorization && email) {
     document.getElementById("loginSpan").innerHTML = `${email}  
     <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>`;
