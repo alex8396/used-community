@@ -1,8 +1,9 @@
 import { insertProduct } from '/api/api.js';
 
 const addProduct = () => {
-    const main = document.getElementById("main");
-    main.innerHTML = `
+    const main_data = document.getElementById("main_data");
+    main_data.innerHTML = `
+    <main id="addProductMain">
         <div id="productNewContainer">
           <h2 id="productNewHeader">상품정보</h2>
             <ul class="productNewUl">
@@ -68,6 +69,7 @@ const addProduct = () => {
               <button id="productNewRegisterButton">등록하기</button>
             </div>
           </footer>
+        </main>
     `;
 
     const selectElement = document.getElementById("productNewSelect");
@@ -258,10 +260,10 @@ const addProduct = () => {
             registerButton.disabled = true;
             registerButton.innerHTML = `<span class="spinner"></span>`;
             registerButton.style.backgroundColor = "#e78787";  // 비활성화된 버튼 색상
-        
+            console.log(imageFiles);
             try {
                 const response = await insertProduct(name, category, description, price, imageFiles, nickname);
-                console.log(response);
+                
                 if (response.data.status === "ok") {
                     alert("상품이 등록되었습니다");
                     window.location.reload();
