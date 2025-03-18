@@ -1,7 +1,7 @@
 import { getAllProducts } from '/api/api.js';
 
 const main = async () => {
-    const main = document.getElementById("main");
+    const main_data = document.getElementById("main_data");
 
     try {
         const response = await getAllProducts();
@@ -21,13 +21,13 @@ const main = async () => {
                 `;
             });
 
-            main.innerHTML += productHTML; // 제품 리스트 HTML 삽입
+            main_data.innerHTML += productHTML; // 제품 리스트 HTML 삽입
         } else {
-            main.innerHTML += `<p>상품 목록을 불러오는 데 실패했습니다.</p>`;
+            main_data.innerHTML += `<p>상품 목록을 불러오는 데 실패했습니다.</p>`;
         }
     } catch (error) {
         console.error(error);
-        main.innerHTML += `<p>오류가 발생했습니다.</p>`;
+        main_data.innerHTML += `<p>오류가 발생했습니다.</p>`;
     }
 };
 

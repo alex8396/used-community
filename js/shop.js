@@ -1,6 +1,6 @@
 const shop = () => {
-    const main = document.getElementById("main");
-    main.innerHTML = `<div>내 상점 페이지</div>`;
+    const main_data = document.getElementById("main_data");
+    main_data.innerHTML = `<div>내 상점 페이지</div>`;
 };
 
 // 페이지 로딩 시 URL에 맞게 상태 초기화
