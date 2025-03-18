@@ -201,7 +201,7 @@
     </div>
     <!-- Main data (상품 목록) -->
     <div id="main_data" class="container">
-      <div class="product-card" onclick="location.href='/product/detail?id=1'">
+      <div class="product-card" data-product-id="1">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -216,7 +216,7 @@
           </button>
         </div>
       </div>
-      <div class="product-card" onclick="location.href='/product/detail?id=1'">
+      <div class="product-card" data-product-id="2">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -231,7 +231,7 @@
           </button>
         </div>
       </div>
-      <div class="product-card" onclick="location.href='/product/detail?id=1'">
+      <div class="product-card" data-product-id="3">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -246,7 +246,7 @@
           </button>
         </div>
       </div>
-      <div class="product-card" onclick="location.href='/product/detail?id=1'">
+      <div class="product-card" data-product-id="4">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -261,7 +261,7 @@
           </button>
         </div>
       </div>
-      <div class="product-card" onclick="location.href='/product/detail?id=1'">
+      <div class="product-card" data-product-id="5">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -276,67 +276,7 @@
           </button>
         </div>
       </div>
-      <div class="product-card" onclick="location.href='/product/detail?id=2'">
-        <img src="img/comment.png" alt="3T 악스 신형">
-        <p class="product-title">3T 악스 신형</p>
-        <div class="product-info">
-          <div class="price-time">
-            <p class="product-price">50,000원</p>
-            <p class="product-time">1분전</p>
-          </div>
-          <button class="like-button" aria-label="찜하기">
-            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="product-card" onclick="location.href='/product/detail?id=3'">
-        <img src="img/comment.png" alt="3T 악스 신형">
-        <p class="product-title">3T 악스 신형</p>
-        <div class="product-info">
-          <div class="price-time">
-            <p class="product-price">50,000원</p>
-            <p class="product-time">1분전</p>
-          </div>
-          <button class="like-button" aria-label="찜하기">
-            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="product-card" onclick="location.href='/product/detail?id=4'">
-        <img src="img/comment.png" alt="3T 악스 신형">
-        <p class="product-title">3T 악스 신형</p>
-        <div class="product-info">
-          <div class="price-time">
-            <p class="product-price">50,000원</p>
-            <p class="product-time">1분전</p>
-          </div>
-          <button class="like-button" aria-label="찜하기">
-            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="product-card" onclick="location.href='/product/detail?id=5'">
-        <img src="img/comment.png" alt="3T 악스 신형">
-        <p class="product-title">3T 악스 신형</p>
-        <div class="product-info">
-          <div class="price-time">
-            <p class="product-price">50,000원</p>
-            <p class="product-time">1분전</p>
-          </div>
-          <button class="like-button" aria-label="찜하기">
-            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="product-card" onclick="location.href='/product/detail?id=6'">
+      <div class="product-card" data-product-id="6">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">

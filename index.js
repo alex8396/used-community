@@ -165,8 +165,9 @@ window.onload = async () => {
   // 상품 카드 클릭 이벤트 처리
   document.querySelectorAll('.product-card').forEach(card => {
     card.addEventListener('click', function(e) {
-      // 링크나 버튼 클릭 시 이벤트 전파 방지
-      if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+      // 찜하기 버튼 클릭 시 상세 페이지 이동 방지
+      if (e.target.closest('.like-button')) {
+        e.preventDefault();
         return;
       }
       
@@ -189,6 +190,7 @@ window.onload = async () => {
       
       try {
         // API 호출 예시
+        // await toggleLikeProduct(productId, isLiked);
         console.log(`상품 ${productId} 찜하기 ${isLiked ? '추가' : '취소'}`);
       } catch (error) {
         console.error('찜하기 처리 중 오류 발생:', error);
