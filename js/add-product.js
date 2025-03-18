@@ -254,13 +254,17 @@ const addProduct = () => {
             }
         
             const nickname = sessionStorage.getItem("nickname");
-        
+            if (nickname === null) {
+                alert("로그인이 필요한 서비스입니다.");
+                return;
+            }
+            
             // 버튼을 비활성화하고 로딩 표시 추가
             const registerButton = e.target;
             registerButton.disabled = true;
             registerButton.innerHTML = `<span class="spinner"></span>`;
             registerButton.style.backgroundColor = "#e78787";  // 비활성화된 버튼 색상
-            console.log(imageFiles);
+            
             try {
                 const response = await insertProduct(name, category, description, price, imageFiles, nickname);
                 
