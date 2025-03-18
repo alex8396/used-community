@@ -162,10 +162,48 @@ window.onload = async () => {
 
   toggleLoginState(sessionStorage.getItem("Authorization"));
 
+  // 상품 카드 클릭 이벤트 처리
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      // 찜하기 버튼 클릭 시 상세 페이지 이동 방지
+      if (e.target.closest('.like-button')) {
+        e.preventDefault();
+        return;
+      }
+      
+      const productId = this.getAttribute('data-product-id');
+      window.location.href = `/product/detail?id=${productId}`;
+    });
+  });
+
+  // 찜하기 버튼 이벤트 처리
+  document.querySelectorAll('.like-button').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation(); // 상품 카드 클릭 이벤트 전파 방지
+      
+      // 버튼 상태 토글
+      this.classList.toggle('active');
+      
+      // 여기에 찜하기 API 호출 로직 추가
+      const productId = this.closest('.product-card').dataset.productId;
+      const isLiked = this.classList.contains('active');
+      
+      try {
+        // API 호출 예시
+        // await toggleLikeProduct(productId, isLiked);
+        console.log(`상품 ${productId} 찜하기 ${isLiked ? '추가' : '취소'}`);
+      } catch (error) {
+        console.error('찜하기 처리 중 오류 발생:', error);
+        // 에러 발생 시 토글 되돌리기
+        this.classList.toggle('active');
+      }
+    });
+  });
+
 };
 
-  // 유틸리티
-  function getCookie(cname) {
+// 유틸리티 함수들
+function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(";");
@@ -179,16 +217,15 @@ window.onload = async () => {
       }
     }
     return "";
-  }
+}
   
-  function removeCookie(cname) {
+function removeCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  }
+}
   
-    Authorization = getCookie("Authorization");
-    email = getCookie("email");
-    if (Authorization && email) {
-    //   axios.defaults.headers.common["Authorization"] = Authorization; // Authorization 헤더 설정
-      document.getElementById("loginSpan").innerHTML = `${email}  
-      <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>`;
-    }
+const Authorization = getCookie("Authorization");
+const email = getCookie("email");
+if (Authorization && email) {
+    document.getElementById("loginSpan").innerHTML = `${email}  
+    <button class="btn btn-danger btn-sm" id="logoutBtn">Logout</button>`;
+}
