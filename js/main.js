@@ -7,18 +7,18 @@ const main = async () => {
         const response = await getAllProducts();
         
         if (response.data.status === "ok") {
-            console.log(response.data.products)
+            console.log(response.data.products);
             const products = response.data.products;
             let productHTML = ""; // 제품 리스트 HTML 문자열
 
             products.forEach(product => {
                 productHTML += `
                     <div class="product">
-                        <img src="${product.imagePaths}" alt="${product.name}" style="width : 200px; height: 200px;"/>
+                        <img src="${product.image1}" alt="${product.name}" style="width : 200px; height: 200px;"/>
                         <div>${product.name}</div>
                         <div>가격: ${product.price}원</div>
-                    </div>
                 `;
+                productHTML += `</div>`;
             });
 
             main_data.innerHTML = productHTML; // 제품 리스트 HTML 삽입

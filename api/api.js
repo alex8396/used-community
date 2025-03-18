@@ -38,8 +38,8 @@ export async function insertProduct(name, category, description, price, images, 
     formData.append("nickname", nickname);
 
     // 이미지들을 FormData에 추가
-    Array.from(images).forEach(image => {
-        formData.append("images", image);  // "images"라는 이름으로 파일을 추가
+    Array.from(images).forEach((image, index) => {
+        formData.append(`image${index + 1}`, image);  // image1, image2, image3으로 추가
     });
 
     try {
