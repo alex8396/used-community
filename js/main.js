@@ -21,13 +21,13 @@ const main = async () => {
                 `;
             });
 
-            main_data.innerHTML += productHTML; // 제품 리스트 HTML 삽입
+            main_data.innerHTML = productHTML; // 제품 리스트 HTML 삽입
         } else {
-            main_data.innerHTML += `<p>상품 목록을 불러오는 데 실패했습니다.</p>`;
+            main_data.innerHTML = `<p>상품 목록을 불러오는 데 실패했습니다.</p>`;
         }
     } catch (error) {
         console.error(error);
-        main_data.innerHTML += `<p>오류가 발생했습니다.</p>`;
+        main_data.innerHTML = `<p>오류가 발생했습니다.</p>`;
     }
 };
 
