@@ -162,6 +162,19 @@ window.onload = async () => {
 
   toggleLoginState(sessionStorage.getItem("Authorization"));
 
+  // 상품 카드 클릭 이벤트 처리
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      // 링크나 버튼 클릭 시 이벤트 전파 방지
+      if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+        return;
+      }
+      
+      const productId = this.getAttribute('data-product-id');
+      window.location.href = `/product/detail?id=${productId}`;
+    });
+  });
+
 };
 
 // 유틸리티 함수들
