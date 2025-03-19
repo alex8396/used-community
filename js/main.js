@@ -19,7 +19,7 @@ const renderProducts = (products) => {
     const main_data = document.getElementById("main_data");
 
     let productHTML = `<div class="container">`;
-
+    console.log(products)
     products.forEach(product => {
         const isLiked = JSON.parse(localStorage.getItem(`liked-${product.id}`)) || false;
 

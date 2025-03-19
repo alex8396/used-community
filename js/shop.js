@@ -1,3 +1,20 @@
+import { getProductByNickname } from '/api/api.js';
+
+const timeAgo = (date) => {
+  const now = new Date();
+  const createdAt = new Date(date);
+  const diffInSeconds = Math.floor((now - createdAt) / 1000);
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
+
+  if (diffInMinutes < 1) return "방금 전";
+  if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
+  if (diffInHours < 24) return `${diffInHours}시간 전`;
+  if (diffInDays < 30) return `${diffInDays}일 전`;
+  return new Date(createdAt).toLocaleDateString();
+};
+
 const shop = () => {
     const main_data = document.getElementById("main_data");
     
@@ -81,10 +98,33 @@ const shop = () => {
     });
 
     // 데이터 로드 함수들
-    const loadSellingProducts = () => {
+    const loadSellingProducts = async() => {
         // 판매 상품 데이터 로드 로직
         const sellingProducts = document.getElementById('sellingProducts');
-        sellingProducts.innerHTML = '<div class="empty-message">판매 중인 상품이 없습니다.</div>';
+        try{
+          const response = await getProductByNickname(nickname);
+          
+          console.log(response.data.products)
+          if(response.data.status === "ok"){
+            const products = response.data.products;
+            products.forEach(product => {
+              sellingProducts.innerHTML += `
+                <div style="border: 1px solid black" data-product-id="${product.id}">
+                  <img src="${product.image1}" alt="${product.name}" class="product-image">
+                  <div>name : ${product.name}</div>
+                  <div>price : ${product.price}</div>
+                  <div>${timeAgo(product.createdAt)}</div>
+                </div>
+              `;  
+            })
+            
+          }else{
+            sellingProducts.innerHTML = '<div class="empty-message">상품 목록을 불러오는 데 실패했습니다.</div>';  
+          }
+        }catch{
+          sellingProducts.innerHTML = '<div class="empty-message">상품 목록을 불러오는 데 실패했습니다.</div>';
+        }
+        
     };
 
     const loadPurchaseHistory = () => {
