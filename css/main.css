@@ -97,7 +97,13 @@ body {
     text-align: left;
     margin: 12px 0;
     font-size: 15px;
+    display: -webkit-box; /* Flexbox 스타일로 한 줄 이상을 제한 */
+    -webkit-line-clamp: 2; /* 한 줄로 제한 */
+    -webkit-box-orient: vertical; /* 세로로 제한 */
+    overflow: hidden; /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* "..."으로 표시 */
 }
+
 @media (max-width: 1024px) {
     .product-card {
         flex: 0 0 calc(25% - 12px);
