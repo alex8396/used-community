@@ -42,6 +42,7 @@ export async function insertProduct(name, category, description, price, images, 
 
     // 이미지들을 FormData에 추가
     Array.from(images).forEach((image, index) => {
+        console.log(`image${index + 1}:`, image);
         formData.append(`image${index + 1}`, image);  // image1, image2, image3으로 추가
     });
 
@@ -105,6 +106,15 @@ export async function addToWishlist(nickname, productId) {
 export async function removeFromWishlist(productId) {
     try {
         const response = await axios.delete(`${URL}/api/wishlist/${productId}`);
+        return response;
+    } catch (error) {
+        console.error('Error remove from wishlist:', error);
+        throw error;
+    }
+}
+export async function getProductById(productId) {
+    try {
+        const response = await axios.get(`${URL}/api/products/${productId}`);
         return response;
     } catch (error) {
         console.error('Error remove from wishlist:', error);
