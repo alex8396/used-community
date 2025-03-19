@@ -270,7 +270,7 @@ const addProduct = () => {
                 
                 if (response.data.status === "ok") {
                     alert("상품이 등록되었습니다");
-                    window.location.href = "http://192.168.219.118:5500/"
+                    window.location.href = "http://192.168.219.120:5500/"
                 } else {
                     alert("상품 등록에 실패했습니다. 다시 시도해주세요");
                 }
