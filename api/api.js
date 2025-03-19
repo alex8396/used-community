@@ -121,3 +121,13 @@ export async function getProductById(productId) {
         throw error;
     }
 }
+export async function deleteProduct(productId) {
+    console.log(productId)
+    try {
+        const response = await axios.delete(`${URL}/api/products/${productId}`);
+        return response;
+    } catch (error) {
+        console.error('Error remove from wishlist:', error);
+        throw error;
+    }
+}

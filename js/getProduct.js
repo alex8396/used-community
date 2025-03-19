@@ -1,4 +1,4 @@
-import { getProductById } from '/api/api.js';
+import { getProductById, deleteProduct } from '/api/api.js';
 
 const timeAgo = (date) => {
     const now = new Date();
@@ -21,10 +21,8 @@ const getProduct = async(productId) => {
     main_data.innerHTML = ``;
     try{
         const response = await getProductById(productId);
-        console.log(response.data.product)
         if(response.data.status === "ok"){
             const product = response.data.product;
-            console.log(product.nickname == nickname)
             main_data.innerHTML += `
                 <div data-product-id="${product.id}">
                     <img src="${product.image1}" alt="${product.name}" class="product-image">
@@ -38,7 +36,7 @@ const getProduct = async(productId) => {
                     <div>liked : ${product.liked}</div>
                     <div>seller : ${product.nickname}</div>
                     <div>${timeAgo(product.createdAt)}</div>
-                    ${product.nickname != nickname ? `<button>구매하기</button>` : `<button>수정하기</button><button>삭제하기</button>`}
+                    ${product.nickname != nickname ? `<button>구매하기</button>` : `<button>수정하기</button><button class="delete-button" id="productDeleteButton" data-product-id="${product.id}">삭제하기</button>`}
                 </div>
             `;
         }else{
@@ -47,6 +45,24 @@ const getProduct = async(productId) => {
     }catch{
         main_data.innerHTML = '<div class="empty-message">상품을 불러오는 데 실패했습니다.</div>';
     }
+
+
+    document.addEventListener("click", async (e) => {
+        
+            const deleteButton = e.target.closest(".delete-button");
+            if(deleteButton){
+                const productId = deleteButton.dataset.productId;
+                const response = await deleteProduct(productId);
+        
+                if (response.data.status === "ok") {
+                    alert("상품이 삭제되었습니다.");
+                    window.location.href = "/";
+                } else {
+                    alert("상품 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+                }
+            }        
+    });
+    
 };
 
 // 페이지 로딩 시 URL에 맞게 상태 초기화
