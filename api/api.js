@@ -1,5 +1,8 @@
 const URL = "http://localhost:8080";
 
+axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("Authorization");
+axios.defaults.headers.common["nickname"] = sessionStorage.getItem("nickname");
+
 export async function signup( email, pwd, nickname) {
     try {
         const response = await axios.post(`${URL}/api/signup`, { email, pwd, nickname});
@@ -87,6 +90,24 @@ export async function getPurchasesByNickname(nickname) {
         return response;
     } catch (error) {
         console.error('Error get products by id:', error);
+        throw error;
+    }
+}
+export async function addToWishlist(nickname, productId) {
+    try {
+        const response = await axios.post(`${URL}/api/wishlist/new`, {productId, nickname});
+        return response;
+    } catch (error) {
+        console.error('Error add to wishlist:', error);
+        throw error;
+    }
+}
+export async function removeFromWishlist(productId) {
+    try {
+        const response = await axios.delete(`${URL}/api/wishlist/${productId}`);
+        return response;
+    } catch (error) {
+        console.error('Error remove from wishlist:', error);
         throw error;
     }
 }
