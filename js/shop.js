@@ -18,38 +18,42 @@ const shop = () => {
     }
 
     main_data.innerHTML = `
-        <div class="shop-container">
-            <div class="shop-header">
-                <div class="shop-info">
-                    <h1 id="shopNickname">${nickname}님의 상점</h1>
-                    <p>상품 <span id="productCount">0</span> · 찜 <span id="likeCount">0</span></p>
-                </div>
+        <!-- 메인 컨텐츠 -->
+    <div class="shop-container">
+        <div class="shop-header">
+            <div class="shop-profile">
+                <!-- 프로필 이미지 -->
             </div>
-
-            <div class="tab-buttons">
-                <button class="tab-button active" data-tab="selling">판매상품</button>
-                <button class="tab-button" data-tab="liked">찜한상품</button>
-                <button class="tab-button" data-tab="purchase">구매내역</button>
-            </div>
-
-            <div id="sellingTab" class="tab-content active">
-                <div class="product-grid" id="sellingProducts">
-                    <!-- 판매 상품들이 여기에 동적으로 추가됩니다 -->
-                </div>
-            </div>
-
-            <div id="likedTab" class="tab-content">
-                <div class="product-grid" id="likedProducts">
-                    <!-- 찜한 상품들이 여기에 동적으로 추가됩니다 -->
-                </div>
-            </div>
-
-            <div id="purchaseTab" class="tab-content">
-                <div class="product-grid" id="purchaseProducts">
-                    <!-- 구매 상품들이 여기에 동적으로 추가됩니다 -->
-                </div>
+            <div class="shop-info">
+                <h1 id="shopNickname">${nickname}</h1>
+                <p>상품 <span id="productCount">0</span> · 찜 <span id="likeCount">0</span></p>
             </div>
         </div>
+
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="selling">판매상품</button>
+            <button class="tab-button" data-tab="liked">찜한상품</button>
+            <button class="tab-button" data-tab="purchase">구매상품</button>
+        </div>
+
+        <div id="sellingTab" class="tab-content active">
+            <div class="product-grid" id="sellingProducts">
+                <!-- 판매 상품들이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+
+        <div id="likedTab" class="tab-content">
+            <div class="product-grid" id="likedProducts">
+                <!-- 찜한 상품들이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+
+        <div id="purchaseTab" class="tab-content">
+            <div class="product-grid" id="purchaseProducts">
+                <!-- 구매한 상품들이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+    </div>
     `;
 
     // 탭 전환 기능
