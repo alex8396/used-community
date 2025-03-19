@@ -22,6 +22,7 @@ window.onload = async () => {
   const toggleLoginState = (isLogin) => {
     const sessionNickname = sessionStorage.getItem("nickname");
     axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("Authorization");
+    axios.defaults.headers.common["nickname"] = sessionNickname;
     const headerContent = document.getElementById("headerContent");
     headerContent.innerHTML = isLogin
       ? `<div id="logoutButton">로그아웃</div><div id="nickname">${sessionNickname}</div>`
@@ -105,6 +106,7 @@ window.onload = async () => {
             sessionStorage.setItem("Authorization", response.data.Authorization);
             sessionStorage.setItem("nickname", response.data.nickname);
             axios.defaults.headers.common["Authorization"] = response.data.Authorization;
+            axios.defaults.headers.common["nickname"] = response.data.nickname;
             toggleLoginState(true);
             modal.style.display = "none";
             resetAuthForm();
