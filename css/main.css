@@ -111,3 +111,22 @@ body {
         flex: 0 0 calc(50% - 8px);
     }
 }
+
+.like-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.heart-icon {
+    width: 24px;
+    height: 24px;
+    stroke: #888;
+    transition: stroke 0.3s ease;
+}
+
+.like-button.liked .heart-icon {
+    stroke: red;
+    fill: red;
+}
