@@ -9,7 +9,7 @@ const getProduct = (productId) => {
 // 페이지 로딩 시 URL에 맞게 상태 초기화
 const initGetProduct = () => {
     const path = document.location.pathname;  // 현재 URL 경로
-    const match = path.match(/\/products\/(\d+)/);  // /product/ 뒤에 숫자를 추출
+    const match = path.match(/\/product\/(\d+)/);  // /product/ 뒤에 숫자를 추출
     
     if (match) {
         const productId = match[1];  // 추출한 productId

@@ -50,7 +50,7 @@ const main = async () => {
 
     try {
         const response = await getAllProducts();
-
+        
         if (response.data.status === "ok") {
             const products = response.data.products;
 
