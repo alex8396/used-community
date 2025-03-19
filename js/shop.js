@@ -1,4 +1,4 @@
-import { signup, login, logout } from '/api/api.js';
+import { signup, login, logout, insertProduct } from '/api/api.js';
 
 window.onload = async () => {
   
@@ -26,6 +26,13 @@ window.onload = async () => {
     headerContent.innerHTML = isLogin
       ? `<div id="logoutButton">로그아웃</div><div id="nickname">${sessionNickname}</div>`
       : `<div id="authButton">로그인/회원가입</div>`;
+    
+    if (window.location.pathname === "/shop") {
+      const shopNickname = document.getElementById("shopNickname");
+      if (shopNickname && isLogin) {
+        shopNickname.textContent = sessionNickname;
+      }
+    }
   };
 
   const resetButton = (button, text) => {
@@ -200,6 +207,72 @@ window.onload = async () => {
     });
   });
 
+  // Add product form handling
+  document.addEventListener("click", async(e) => {
+    // ... existing auth click handlers ...
+
+    // Handle add product form submission
+    if (e.target.id === "productNewRegisterButton") {
+      // ... existing product registration logic ...
+    }
+  });
+
+  // Tab switching functionality
+  const tabButtons = document.querySelectorAll('.tab-button');
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tabId = button.getAttribute('data-tab');
+      
+      // Remove active class from all tabs
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => 
+        content.classList.remove('active')
+      );
+      
+      // Add active class to clicked tab
+      button.classList.add('active');
+      document.getElementById(`${tabId}Tab`).classList.add('active');
+    });
+  });
+
+  // Handle navigation
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("#navSellLink")) {
+      e.preventDefault();
+      addProduct();
+    }
+  });
+
+  // Initialize shop view
+  const initShopView = () => {
+    const shopContainer = document.querySelector('.shop-container');
+    if (!shopContainer) return;
+
+    const nickname = sessionStorage.getItem("nickname");
+    if (nickname) {
+      document.getElementById("shopNickname").textContent = nickname;
+      const headerNickname = document.getElementById("nickname");
+      if (headerNickname) {
+        headerNickname.textContent = nickname;
+      }
+    } else {
+      window.location.href = '/';
+    }
+  };
+
+  // Initialize based on current path
+  if (window.location.pathname === "/shop") {
+    initShopView();
+  }
+
+  // Handle browser navigation
+  window.addEventListener("popstate", () => {
+    if (window.location.pathname === "/shop") {
+      initShopView();
+    } else if (window.location.pathname === "/products/new") {
+      addProduct();
+    }
+  });
 };
 
 // 유틸리티 함수들
