@@ -1,4 +1,4 @@
-import { getProductByNickname } from '/api/api.js';
+import { getProductByNickname, getWishlistByNickname } from '/api/api.js';
 
 const timeAgo = (date) => {
   const now = new Date();
@@ -104,12 +104,10 @@ const shop = () => {
         sellingProducts.innerHTML = ``;
         try{
           const response = await getProductByNickname(nickname);
-          // let productHTML = `<div>`
           if(response.data.status === "ok"){
-            
             const products = response.data.products;
             if(products.length==0){
-              sellingProducts.innerHTML += `판매 중인 상품이 없습니다.`;
+              sellingProducts.innerHTML += '<div class="empty-message">판매 중인 상품이 없습니다.</div>';  
             }else{
               products.forEach(product => {
                 sellingProducts.innerHTML += `
@@ -137,10 +135,37 @@ const shop = () => {
         purchaseProducts.innerHTML = '<div class="empty-message">구매 내역이 없습니다.</div>';
     };
 
-    const loadLikedProducts = () => {
+    const loadLikedProducts = async() => {
         // 찜한 상품 데이터 로드 로직
         const likedProducts = document.getElementById('likedProducts');
-        likedProducts.innerHTML = '<div class="empty-message">찜한 상품이 없습니다.</div>';
+        likedProducts.innerHTML = ``;
+        try{
+          const response = await getWishlistByNickname(nickname);
+          
+          if(response.data.status === "ok"){
+            console.log(response.data.wishlist)
+            const products = response.data.wishlist;
+            if(products.length==0){
+              likedProducts.innerHTML += '<div class="empty-message">찜한 상품이 없습니다.</div>';  
+            }else{
+              products.forEach(product => {  
+                likedProducts.innerHTML += `
+                  <div data-product-id="${product.productId}">
+                    <img src="${product.image1}" alt="${product.productName}" class="product-image">
+                    <div>name : ${product.productName}</div>
+                    <div>price : ${product.productPrice}</div>
+                    <div>${timeAgo(product.createAt)}</div>
+                  </div>
+                `;  
+              })
+            }
+          }else{
+            likedProducts.innerHTML = '<div class="empty-message">찜 목록을 불러오는 데 실패했습니다.</div>';  
+          }
+        }catch{
+          likedProducts.innerHTML = '<div class="empty-message">찜 목록을 불러오는 데 실패했습니다.</div>';
+        }
+        
     };
 
     // 초기 데이터 로드

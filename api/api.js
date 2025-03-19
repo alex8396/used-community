@@ -72,3 +72,12 @@ export async function getProductByNickname(nickname) {
         throw error;
     }
 }
+export async function getWishlistByNickname(nickname) {
+    try {
+        const response = await axios.get(`${URL}/api/wishlist/nickname/${nickname}`);
+        return response;
+    } catch (error) {
+        console.error('Error get products by id:', error);
+        throw error;
+    }
+}
