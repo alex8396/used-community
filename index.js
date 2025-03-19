@@ -18,16 +18,23 @@ window.onload = async () => {
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
   const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
-
-  const toggleLoginState = (isLogin) => {
+  
+  const toggleLoginState = (isLogin, shouldReload = false) => {
     const sessionNickname = sessionStorage.getItem("nickname");
     axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("Authorization");
     axios.defaults.headers.common["nickname"] = sessionNickname;
+    
     const headerContent = document.getElementById("headerContent");
     headerContent.innerHTML = isLogin
       ? `<div id="logoutButton">로그아웃</div><div id="nickname">${sessionNickname}</div>`
       : `<div id="authButton">로그인/회원가입</div>`;
-  };
+
+    // 로그인/로그아웃 시에만 새로고침
+    if (shouldReload) {
+        window.location.reload();
+    }
+};
+
 
   const resetButton = (button, text) => {
     button.disabled = false;
@@ -78,7 +85,7 @@ window.onload = async () => {
       try {
         await logout();
         sessionStorage.clear();
-        toggleLoginState(false);
+        toggleLoginState(false, true);
       } catch (error) {
         console.error("로그아웃 오류:", error);
         alert("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -107,7 +114,7 @@ window.onload = async () => {
             sessionStorage.setItem("nickname", response.data.nickname);
             axios.defaults.headers.common["Authorization"] = response.data.Authorization;
             axios.defaults.headers.common["nickname"] = response.data.nickname;
-            toggleLoginState(true);
+            toggleLoginState(true, true);
             modal.style.display = "none";
             resetAuthForm();
           } else alert(response.data.msg);
