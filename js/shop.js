@@ -18,6 +18,7 @@ const shop = () => {
     }
 
     main_data.innerHTML = `
+    
         <!-- 메인 컨텐츠 -->
     <div class="shop-container">
         <div class="shop-header">
