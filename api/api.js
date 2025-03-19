@@ -81,3 +81,12 @@ export async function getWishlistByNickname(nickname) {
         throw error;
     }
 }
+export async function getPurchasesByNickname(nickname) {
+    try {
+        const response = await axios.get(`${URL}/api/purchase/nickname/${nickname}`);
+        return response;
+    } catch (error) {
+        console.error('Error get products by id:', error);
+        throw error;
+    }
+}

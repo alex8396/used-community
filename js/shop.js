@@ -1,4 +1,4 @@
-import { getProductByNickname, getWishlistByNickname } from '/api/api.js';
+import { getProductByNickname, getWishlistByNickname, getPurchasesByNickname } from '/api/api.js';
 
 const timeAgo = (date) => {
   const now = new Date();
@@ -104,6 +104,7 @@ const shop = () => {
         sellingProducts.innerHTML = ``;
         try{
           const response = await getProductByNickname(nickname);
+          
           if(response.data.status === "ok"){
             const products = response.data.products;
             if(products.length==0){
@@ -115,6 +116,7 @@ const shop = () => {
                     <img src="${product.image1}" alt="${product.name}" class="product-image">
                     <div>name : ${product.name}</div>
                     <div>price : ${product.price}</div>
+                    <div>status : ${product.isSold}</div>
                     <div>${timeAgo(product.createdAt)}</div>
                   </div>
                 `;  
@@ -129,10 +131,37 @@ const shop = () => {
         
     };
 
-    const loadPurchaseHistory = () => {
+    const loadPurchaseHistory = async() => {
         // 구매 내역 데이터 로드 로직
         const purchaseProducts = document.getElementById('purchaseProducts');
-        purchaseProducts.innerHTML = '<div class="empty-message">구매 내역이 없습니다.</div>';
+        purchaseProducts.innerHTML = '';
+
+        try{
+          const response = await getPurchasesByNickname(nickname);
+          
+          if(response.data.status === "ok"){
+            const products = response.data.products;
+            if(products.length==0){
+              purchaseProducts.innerHTML += '<div class="empty-message">구매한 상품이 없습니다.</div>';  
+            }else{
+              products.forEach(product => {  
+                purchaseProducts.innerHTML += `
+                  <div data-product-id="${product.productId}">
+                    <img src="${product.image1}" alt="${product.productName}" class="product-image">
+                    <div>name : ${product.productName}</div>
+                    <div>price : ${product.productPrice}</div>
+                    <div>status : ${product.isSold}</div>
+                    <div>${timeAgo(product.createAt)}</div>
+                  </div>
+                `;  
+              })
+            }
+          }else{
+            purchaseProducts.innerHTML = '<div class="empty-message">구매 목록을 불러오는 데 실패했습니다.</div>';  
+          }
+        }catch{
+          purchaseProducts.innerHTML = '<div class="empty-message">구매 목록을 불러오는 데 실패했습니다.</div>';
+        }
     };
 
     const loadLikedProducts = async() => {
@@ -143,7 +172,6 @@ const shop = () => {
           const response = await getWishlistByNickname(nickname);
           
           if(response.data.status === "ok"){
-            console.log(response.data.wishlist)
             const products = response.data.wishlist;
             if(products.length==0){
               likedProducts.innerHTML += '<div class="empty-message">찜한 상품이 없습니다.</div>';  
@@ -154,6 +182,7 @@ const shop = () => {
                     <img src="${product.image1}" alt="${product.productName}" class="product-image">
                     <div>name : ${product.productName}</div>
                     <div>price : ${product.productPrice}</div>
+                    <div>status : ${product.isSold}</div>
                     <div>${timeAgo(product.createAt)}</div>
                   </div>
                 `;  
