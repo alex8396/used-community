@@ -1,9 +1,52 @@
-const getProduct = (productId) => {
-    const main_data = document.getElementById("main_data");
+import { getProductById } from '/api/api.js';
 
-    main_data.innerHTML = `
-        <div>상품 ${productId}번 페이지</div>
-    `;
+const timeAgo = (date) => {
+    const now = new Date();
+    const createdAt = new Date(date);
+    const diffInSeconds = Math.floor((now - createdAt) / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInMinutes < 1) return "방금 전";
+    if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
+    if (diffInHours < 24) return `${diffInHours}시간 전`;
+    if (diffInDays < 30) return `${diffInDays}일 전`;
+    return new Date(createdAt).toLocaleDateString();
+};
+
+const getProduct = async(productId) => {
+    const main_data = document.getElementById("main_data");
+    const nickname = sessionStorage.getItem("nickname");
+    main_data.innerHTML = ``;
+    try{
+        const response = await getProductById(productId);
+        console.log(response.data.product)
+        if(response.data.status === "ok"){
+            const product = response.data.product;
+            console.log(product.nickname == nickname)
+            main_data.innerHTML += `
+                <div data-product-id="${product.id}">
+                    <img src="${product.image1}" alt="${product.name}" class="product-image">
+                    ${product.image2 ? `<img src="${product.image2}" alt="${product.name}" class="product-image"></img>` : ``}
+                    ${product.image3 ? `<img src="${product.image3}" alt="${product.name}" class="product-image"></img>` : ``}
+                    <div>name : ${product.name}</div>
+                    <div>price : ${product.price}</div>
+                    <div>category : ${product.category}</div>
+                    <div>description : ${product.description}</div>
+                    <div>status : ${product.isSold}</div>
+                    <div>liked : ${product.liked}</div>
+                    <div>seller : ${product.nickname}</div>
+                    <div>${timeAgo(product.createdAt)}</div>
+                    ${product.nickname != nickname ? `<button>구매하기</button>` : `<button>수정하기</button><button>삭제하기</button>`}
+                </div>
+            `;
+        }else{
+        main_data.innerHTML = '<div class="empty-message">상품을 불러오는 데 실패했습니다.</div>';  
+        }
+    }catch{
+        main_data.innerHTML = '<div class="empty-message">상품을 불러오는 데 실패했습니다.</div>';
+    }
 };
 
 // 페이지 로딩 시 URL에 맞게 상태 초기화

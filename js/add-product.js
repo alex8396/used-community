@@ -92,9 +92,9 @@ const addProduct = () => {
         if (event.target.id === "productNewImgInput") {
             const previewContainer = document.getElementById("productNewImgContainer");
             const files = event.target.files;
-    
+            files.value = "";
             let currentImgCount = previewContainer.getElementsByTagName("img").length; // 현재 이미지 개수
-    
+            
             const filesToAdd = Array.from(files).slice(0, 3 - currentImgCount); // 최대 추가할 수 있는 파일 수만큼 슬라이싱
     
             if (filesToAdd.length === 0) {
@@ -124,10 +124,16 @@ const addProduct = () => {
                     const button = document.createElement("button");
                     button.id = "productNewImgClose";
                     button.classList = "productNewImgClose";
-                    button.addEventListener("click", () => {
+                    button.addEventListener("click", (e) => { 
+                        const button = e.target;
                         const parentDiv = button.parentElement;
                         parentDiv.remove();
                         updateImageCount();
+                        
+                        // 삭제 후 이미지 input을 초기화
+                        const fileInput = document.getElementById("productNewImgInput");
+                        fileInput.value = "";  // 파일 input 초기화
+                        fileInput.dispatchEvent(new Event("change"));
                     });
     
                     div.appendChild(img);
@@ -270,7 +276,7 @@ const addProduct = () => {
                 
                 if (response.data.status === "ok") {
                     alert("상품이 등록되었습니다");
-                    window.location.href = "http://192.168.219.120:5500/"
+                    location.reload();
                 } else {
                     alert("상품 등록에 실패했습니다. 다시 시도해주세요");
                 }
@@ -300,8 +306,12 @@ window.addEventListener("DOMContentLoaded", initAddProduct);
 
 document.addEventListener("click", (e) => {
     if (e.target.closest("#navSellLink")) {
-        history.replaceState(null, null, "/products/new");  // replaceState로 URL 변경
-        addProduct();  // 페이지 렌더링
+        if (document.location.pathname === "/products/new") {
+            location.reload();  // 현재 페이지가 /products/new이면 새로고침
+        } else {
+            history.replaceState(null, null, "/products/new");  // replaceState로 URL 변경
+            addProduct();  // 페이지 렌더링
+        }
     }
 });
 

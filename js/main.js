@@ -45,8 +45,12 @@ const renderProducts = (products) => {
                 </div>
             </div>`;
     });
-
     productHTML += `</div>`;
+
+    if(products.length == 0){
+        productHTML = `<div class="container">등록된 상품이 없습니다.<div>`
+    }
+
     main_data.innerHTML = productHTML;
 };
 
