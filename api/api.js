@@ -63,3 +63,12 @@ export async function getAllProducts() {
         throw error;
     }
 }
+export async function getProductByNickname(nickname) {
+    try {
+        const response = await axios.get(`${URL}/api/products/nickname/${nickname}`);
+        return response;
+    } catch (error) {
+        console.error('Error get products by id:', error);
+        throw error;
+    }
+}
