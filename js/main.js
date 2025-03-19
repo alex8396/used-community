@@ -23,6 +23,7 @@ const renderProducts = (products) => {
         
         const isLiked = product.liked || false;
         const nickname = sessionStorage.getItem("nickname");
+        console.log(product.liked)
         productHTML += `
             <div class="product-card" data-product-id="${product.id}">
                 <img src="${product.image1}" alt="${product.name}" class="product-image">

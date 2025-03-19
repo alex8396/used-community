@@ -131,3 +131,13 @@ export async function deleteProduct(productId) {
         throw error;
     }
 }
+export async function buyProduct(productId, buyerNickname) {
+    console.log(productId)
+    try {
+        const response = await axios.post(`${URL}/api/purchase/new`, {productId, buyerNickname});
+        return response;
+    } catch (error) {
+        console.error('Error remove from wishlist:', error);
+        throw error;
+    }
+}
