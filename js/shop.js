@@ -101,23 +101,27 @@ const shop = () => {
     const loadSellingProducts = async() => {
         // 판매 상품 데이터 로드 로직
         const sellingProducts = document.getElementById('sellingProducts');
+        sellingProducts.innerHTML = ``;
         try{
           const response = await getProductByNickname(nickname);
-          
-          console.log(response.data.products)
+          // let productHTML = `<div>`
           if(response.data.status === "ok"){
-            const products = response.data.products;
-            products.forEach(product => {
-              sellingProducts.innerHTML += `
-                <div style="border: 1px solid black" data-product-id="${product.id}">
-                  <img src="${product.image1}" alt="${product.name}" class="product-image">
-                  <div>name : ${product.name}</div>
-                  <div>price : ${product.price}</div>
-                  <div>${timeAgo(product.createdAt)}</div>
-                </div>
-              `;  
-            })
             
+            const products = response.data.products;
+            if(products.length==0){
+              sellingProducts.innerHTML += `판매 중인 상품이 없습니다.`;
+            }else{
+              products.forEach(product => {
+                sellingProducts.innerHTML += `
+                  <div data-product-id="${product.id}">
+                    <img src="${product.image1}" alt="${product.name}" class="product-image">
+                    <div>name : ${product.name}</div>
+                    <div>price : ${product.price}</div>
+                    <div>${timeAgo(product.createdAt)}</div>
+                  </div>
+                `;  
+              })
+            }
           }else{
             sellingProducts.innerHTML = '<div class="empty-message">상품 목록을 불러오는 데 실패했습니다.</div>';  
           }
