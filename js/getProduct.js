@@ -18,63 +18,62 @@ const timeAgo = (date) => {
 const getProduct = async(productId) => {
     const main_data = document.getElementById("main_data");
     const nickname = sessionStorage.getItem("nickname");
-    main_data.innerHTML = ``;
-    try{
-        const response = await getProductById(productId);
-        if(response.data.status === "ok"){
-            const product = response.data.product;
-            console.log(product.liked)
-            main_data.innerHTML += `
-                <div data-product-id="${product.id}">
-                    <img src="${product.image1}" alt="${product.name}" class="product-image">
-                    ${product.image2 ? `<img src="${product.image2}" alt="${product.name}" class="product-image"></img>` : ``}
-                    ${product.image3 ? `<img src="${product.image3}" alt="${product.name}" class="product-image"></img>` : ``}
-                    <div>name : ${product.name}</div>
-                    <div>price : ${product.price}</div>
-                    <div>category : ${product.category}</div>
-                    <div>description : ${product.description}</div>
-                    <div>status : ${product.isSold}</div>
-                    <div>liked : ${product.liked}</div>
-                    <div>seller : ${product.nickname}</div>
-                    <div>${timeAgo(product.createdAt)}</div>
-                    ${nickname ? ` <!-- 로그인 되어있을 때 -->
-                        ${product.nickname != nickname // 로그인 된 경우, 현재 상품의 판매자가 나와 다를 때
-                            ? `
-                                <button class="like-button ${product.liked ? "liked" : ""}" data-product-id="${product.id}" aria-label="찜하기">
-                                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                    </svg>
-                                </button>
-                                ${product.isSold == "판매중" ? `
-                                    <button class="buyButton" data-product-id="${product.id}">
-                                        구매하기
-                                    </button>
-                                `: ``}
-                                
-                            ` 
-                            : ` <!-- 내 상품일 때 -->
-                                ${product.isSold == "판매중" ? `
-                                    <button class="updateButton" data-product-id="${product.id}">
-                                        수정하기
-                                    </button>
-                                    <button class="deleteButton" data-product-id="${product.id}">
-                                        삭제하기
-                                    </button>
-                                `: ``}
-                            `
-                        }    
-                    ` : ``}
-                    
-                    
-                </div>
-            `;
-        }else{
-        main_data.innerHTML = '<div class="empty-message">상품을 불러오는 데 실패했습니다.</div>';  
-        }
-    }catch{
-        main_data.innerHTML = '<div class="empty-message">상품을 불러오는 데 실패했습니다.</div>';
+    
+    // CSS 파일 동적 추가
+    if (!document.querySelector('link[href="/css/getProduct.css"]')) {
+        const linkElement = document.createElement('link');
+        linkElement.rel = 'stylesheet';
+        linkElement.href = '/css/getProduct.css';
+        document.head.appendChild(linkElement);
     }
 
+    main_data.innerHTML = ``;
+    try {
+        const response = await getProductById(productId);
+        if (response.data.status === "ok") {
+            const product = response.data.product;
+            main_data.innerHTML += `
+                <div data-product-id="${product.id}" class="product-card">
+                    <img src="${product.image1}" alt="${product.name}" class="product-image">
+                    <div class="product-details">
+                        <h2 class="product-name">${product.name}</h2>
+                        <p class="price">${product.price}원</p>
+                        <p class="description">${product.description}</p>
+                        <p class="status">상태: ${product.isSold}</p>
+                        <p class="seller">판매자: ${product.nickname}</p>
+                        <p class="time">${timeAgo(product.createdAt)}</p>
+                    </div>
+                    ${nickname ? `
+                        ${product.nickname !== nickname ? `
+                            <button class="like-button ${product.liked ? "liked" : ""}" data-product-id="${product.id}" aria-label="찜하기">
+                                <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
+                            ${product.isSold === "판매중" ? `
+                                <button class="buyButton" data-product-id="${product.id}">
+                                    바로구매
+                                </button>
+                            ` : ``}
+                        ` : `
+                            ${product.isSold === "판매중" ? `
+                                <button class="updateButton" data-product-id="${product.id}">
+                                    수정하기
+                                </button>
+                                <button class="deleteButton" data-product-id="${product.id}">
+                                    삭제하기
+                                </button>
+                            ` : ``}
+                        `}
+                    ` : ``}
+                </div>
+            `;
+        } else {
+            main_data.innerHTML = '<div class="empty-message">상품을 불러오는 데 실패했습니다.</div>';  
+        }
+    } catch {
+        main_data.innerHTML = '<div class="empty-message">상품을 불러오는 데 실패했습니다.</div>';
+    }
 
     document.addEventListener("click", async (e) => {
         const updateButton = e.target.closest(".updateButton");
@@ -98,7 +97,6 @@ const getProduct = async(productId) => {
             }
         }
         
-
         const likeButton = e.target.closest(".like-button");
         if (likeButton) {
             e.stopPropagation(); // 이벤트 전파 방지 (상품 상세 페이지로 이동하는 것을 막음)
