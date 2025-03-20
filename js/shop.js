@@ -175,7 +175,7 @@ const shop = () => {
           const isLiked = true;
           if(response.data.status === "ok"){
             const products = response.data.wishlist;
-            console.log(products)
+            
             if(products.length==0){
               likedProducts.innerHTML += '<div class="empty-message">찜한 상품이 없습니다.</div>';  
             }else{
