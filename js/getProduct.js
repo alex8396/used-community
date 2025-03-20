@@ -79,15 +79,7 @@ const getProduct = async(productId) => {
     document.addEventListener("click", async (e) => {
         const updateButton = e.target.closest(".updateButton");
         if(updateButton){
-            // const productId = updateButton.dataset.productId;
-            // const response = await deleteProduct(productId);
-    
-            // if (response.data.status === "ok") {
-            //     alert("상품이 삭제되었습니다.");
-            //     window.location.href = "/";
-            // } else {
-            //     alert("상품 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
-            // }
+            window.location.href = `/product/update/${productId}`;
         }  
         
         const deleteButton = e.target.closest(".deleteButton");
