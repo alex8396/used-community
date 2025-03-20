@@ -107,12 +107,13 @@ const shop = () => {
           
           if(response.data.status === "ok"){
             const products = response.data.products;
+            
             if(products.length==0){
               sellingProducts.innerHTML += '<div class="empty-message">판매 중인 상품이 없습니다.</div>';  
             }else{
               products.forEach(product => {
                 sellingProducts.innerHTML += `
-                  <div class="product-card" data-product-id="${product.productId}">
+                  <div class="product-card" data-product-id="${product.id}">
                     <img src="${product.image1}" alt="${product.name}" class="product-image">
                     <div>name : ${product.name}</div>
                     <div>price : ${product.price}</div>
