@@ -6,7 +6,7 @@ const updateProduct = async(productId) => {
     const response = await getProductById(productId);
     const nickname = sessionStorage.getItem("nickname")
     const product = response.data.product;
-    console.log(product)
+    
     if(product==null){
         alert("올바르지 않은 접근입니다.")    
         location.href = "/"
@@ -16,6 +16,30 @@ const updateProduct = async(productId) => {
         location.href = "/"
     }
     
+    let count = 1;
+    if(product.image2) count++;
+    if(product.image3) count++;
+
+    let imageHtml = `
+    <div id="productNewImgDiv" style="margin-right: 16px">
+        <img src="${product.image1}" alt="미리보기 1" id="productNewImg" style="width:200px; height:200px">
+        <button id="productNewImgClose" class="productNewImgClose"></button>
+    </div>`;
+    if (product.image2) {
+        imageHtml += `
+        <div id="productNewImgDiv" style="margin-right: 16px">
+            <img src="${product.image2}" alt="미리보기 2" id="productNewImg" style="width:200px; height:200px">
+            <button id="productNewImgClose" class="productNewImgClose"></button>
+        </div>`;
+    }
+    if (product.image3) {
+        imageHtml += `
+        <div id="productNewImgDiv">
+            <img src="${product.image3}" alt="미리보기 3" id="productNewImg" style="width:200px; height:200px">
+            <button id="productNewImgClose" class="productNewImgClose"></button>
+        </div>`;
+    }
+
     main_data.innerHTML = `
     <main id="addProductMain">
         <div id="productNewContainer">
@@ -23,11 +47,11 @@ const updateProduct = async(productId) => {
             <ul class="productNewUl">
               <li class="productNewLi">
                   <div class="productNewTitle" id="productNewImgTitle">
-                  상품이미지<small>(0/3)</small>
+                  상품이미지<small>(${count}/3)</small>
                   </div>
                   <div class="productNewContent" id="productNewImgContent">
                     <div id="productNewImgContainer">
-                        <div id="productNewImgInputWrapper">이미지 등록
+                        <div id="productNewImgInputWrapper" style="display: none">이미지 등록
                             <input type="file" accept="image/jpg, image/jpeg, image/png" multiple id="productNewImgInput">
                         </div>
                     </div>
@@ -110,86 +134,66 @@ const updateProduct = async(productId) => {
 
     // 카테고리 select 값 설정
     document.getElementById("productNewSelect").value = product.category;
-
-    document.addEventListener("change", (event) => {
-        if (event.target.id === "productNewImgInput") {
-            const previewContainer = document.getElementById("productNewImgContainer");
-            const files = event.target.files;
-            files.value = "";
-            let currentImgCount = previewContainer.getElementsByTagName("img").length; // 현재 이미지 개수
-            
-            const filesToAdd = Array.from(files).slice(0, 3 - currentImgCount); // 최대 추가할 수 있는 파일 수만큼 슬라이싱
     
-            if (filesToAdd.length === 0) {
-                alert("이미지는 최대 3개까지만 추가할 수 있습니다.");
-                return;
-            }
+    document.addEventListener("click", (event) => {
+        if (event.target.classList.contains("productNewImgClose")) {
+            const button = event.target;
+            const parentDiv = button.parentElement;
+            parentDiv.remove();  // 이미지 삭제
+            updateImageCount();
     
-            filesToAdd.forEach((file, index) => {
-                if (!file.type.match("image/(jpeg|jpg|png)")) {
-                    alert(`"${file.name}"은(는) 유효한 이미지 파일이 아닙니다.`);
-                    return;
-                }
-    
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const div = document.createElement("div");
-                    div.id = "productNewImgDiv";
-    
-                    // margin-right를 이미지 개수에 따라 결정
-                    div.style.marginRight = currentImgCount === 2 ? "0px" : "16px";
-    
-                    const img = document.createElement("img");
-                    img.src = e.target.result;
-                    img.alt = `미리보기 ${index + 1}`;
-                    img.id = "productNewImg";
-    
-                    const button = document.createElement("button");
-                    button.id = "productNewImgClose";
-                    button.classList = "productNewImgClose";
-                    button.addEventListener("click", (e) => { 
-                        const button = e.target;
-                        const parentDiv = button.parentElement;
-                        parentDiv.remove();
-                        updateImageCount();
-                        
-                        // 삭제 후 이미지 input을 초기화
-                        const fileInput = document.getElementById("productNewImgInput");
-                        fileInput.value = "";  // 파일 input 초기화
-                        fileInput.dispatchEvent(new Event("change"));
-                    });
-    
-                    div.appendChild(img);
-                    div.appendChild(button);
-                    previewContainer.appendChild(div);
-                    currentImgCount++; // 이미지 추가 후 개수 증가
-    
-                    // 이미지 개수 및 margin-right 업데이트
-                    updateImageCount();
-                };
-    
-                reader.readAsDataURL(file);
-            });
-    
-            function updateImageCount() {
-                const smallTag = document.querySelector("small");
-                const childrenCount = previewContainer.querySelectorAll("#productNewImgDiv").length;
-                smallTag.innerHTML = `(${childrenCount}/3)`;
-    
-                // 각 이미지 div의 margin-right 업데이트
-                const imageDivs = previewContainer.querySelectorAll("#productNewImgDiv");
-                imageDivs.forEach((div, index) => {
-                    if (index === imageDivs.length - 1) {
-                        div.style.marginRight = "0"; // 마지막 이미지는 margin-right 0
-                    } else {
-                        div.style.marginRight = "16px"; // 나머지 이미지는 margin-right 16px
-                    }
-                });
-            }
+            // 이미지 삭제 후 input 초기화 (새로운 이미지 추가 가능하게)
+            const fileInput = document.getElementById("productNewImgInput");
+            fileInput.value = "";  // 파일 input 초기화
+            fileInput.dispatchEvent(new Event("change"));
         }
     });
+
+    function updateImageCount() {
+        const previewContainer = document.getElementById("productNewImgContainer");
+        const smallTag = document.querySelector("small");
+        const childrenCount = previewContainer.querySelectorAll("#productNewImgDiv").length;
+        smallTag.innerHTML = `(${childrenCount}/3)`;
     
+        // 각 이미지 div의 margin-right 업데이트
+        const imageDivs = previewContainer.querySelectorAll("#productNewImgDiv");
+        imageDivs.forEach((div, index) => {
+            div.style.marginRight = index === imageDivs.length - 1 ? "0" : "16px";
+        });
+    }
     
+    const setInitialImages = (product) => {
+        const previewContainer = document.getElementById("productNewImgContainer");
+
+        const files = [
+            { src: product.image1 },
+            { src: product.image2 },
+            { src: product.image3 }
+        ].filter(file => file.src);
+        
+        // 기존 이미지를 미리보기로 표시
+        files.forEach((file, index) => {
+            const div = document.createElement("div");
+            div.id = "productNewImgDiv";
+            
+            // margin-right를 이미지 개수에 따라 결정
+            div.style.marginRight = index === 2 ? "0px" : "16px";
+            
+            const img = document.createElement("img");
+            img.src = file.src;
+            img.alt = `미리보기 ${index + 1}`;
+            img.id = "productNewImg";
+            
+            
+            div.appendChild(img);
+            previewContainer.appendChild(div);
+        });
+        
+        updateImageCount();
+    };
+    
+    // 상품 정보 로드 후 이미지 미리보기 설정
+    setInitialImages(product);
     
     
     
@@ -252,66 +256,64 @@ const updateProduct = async(productId) => {
         }
 
         // 등록하기 클릭한 경우
-        if (e.target.id === "productUpdateRegisterButton") {
-            const name = document.getElementById("productNewNameInput").value.trim();
-            const category = document.getElementById("productNewSelect").value;
-            const description = document.getElementById("productNewDscrpInput").value.trim();
-            const price = document.getElementById("productNewPriceInput").value.trim().replace(/,/g, ""); // 쉼표 제거
-            const fileInput = document.getElementById("productNewImgInput");
-            const imageFiles = fileInput.files;  // 선택된 이미지 파일들을 가져옴
-        
-            // 필수 입력 항목 검사
-            if (!name) {
-                alert("상품명을 입력해 주세요.");
-                return;
-            }
-            if (category === "선택") {
-                alert("카테고리를 선택해 주세요.");
-                return;
-            }
-            if (!description) {
-                alert("상품 설명을 입력해 주세요.");
-                return;
-            }
-            if (!price || isNaN(price) || parseInt(price) <= 0) {
-                alert("올바른 가격을 입력해 주세요.");
-                return;
-            }
-            if (imageFiles.length === 0) {
-                alert("상품 사진을 등록해 주세요.");
-                return;
-            }
-        
-            const nickname = sessionStorage.getItem("nickname");
-            if (nickname === null) {
-                alert("로그인이 필요한 서비스입니다.");
-                return;
-            }
-            
-            // 버튼을 비활성화하고 로딩 표시 추가
-            const registerButton = e.target;
-            registerButton.disabled = true;
-            registerButton.innerHTML = `<span class="spinner"></span>`;
-            registerButton.style.backgroundColor = "#e78787";  // 비활성화된 버튼 색상
-            
-            try {
-                const response = await updateProductById(name, category, description, price, imageFiles, nickname);
-                
-                if (response.data.status === "ok") {
-                    alert("상품이 수정되었습니다");
-                    location.reload();
-                } else {
-                    alert("상품 수정에 실패했습니다. 다시 시도해주세요");
-                }
-            } catch (error) {
-                alert("서버와의 통신 중 오류가 발생했습니다. 다시 시도해주세요.");
-            } finally {
-                // 작업 끝나면 버튼 활성화하고 원래 상태로 되돌리기
-                registerButton.disabled = false;
-                registerButton.innerHTML = "수정하기";
-                registerButton.style.backgroundColor = "#ef0e0e";  // 원래 버튼 색상
-            }
+    if (e.target.id === "productUpdateRegisterButton") {
+        const name = document.getElementById("productNewNameInput").value.trim();
+        const category = document.getElementById("productNewSelect").value;
+        const description = document.getElementById("productNewDscrpInput").value.trim();
+        const price = document.getElementById("productNewPriceInput").value.trim().replace(/,/g, ""); // 쉼표 제거
+
+        // 필수 입력 항목 검사
+        if (!name) {
+            alert("상품명을 입력해 주세요.");
+            return;
         }
+        if (category === "선택") {
+            alert("카테고리를 선택해 주세요.");
+            return;
+        }
+        if (!description) {
+            alert("상품 설명을 입력해 주세요.");
+            return;
+        }
+        if (!price || isNaN(price) || parseInt(price) <= 0) {
+            alert("올바른 가격을 입력해 주세요.");
+            return;
+        }
+
+        const nickname = sessionStorage.getItem("nickname");
+        if (nickname === null) {
+            alert("로그인이 필요한 서비스입니다.");
+            return;
+        }
+
+        // 버튼을 비활성화하고 로딩 표시 추가
+        const registerButton = e.target;
+        registerButton.disabled = true;
+        registerButton.innerHTML = `<span class="spinner"></span>`;
+        registerButton.style.backgroundColor = "#e78787";  // 비활성화된 버튼 색상
+
+        try {
+            const path = document.location.pathname;
+            const match = path.match(/^\/product\/update\/(\d+)$/); // 숫자 ID 추출
+            const productId = match[1];
+            
+            const response = await updateProductById(productId,name, category, description, price, nickname);
+            
+            if (response.data.status === "ok") {
+                alert("상품이 수정되었습니다");
+                location.href = `/product/${productId}`;
+            } else {
+                alert("상품 수정에 실패했습니다. 다시 시도해주세요");
+            }
+        } catch (error) {
+            alert("서버와의 통신 중 오류가 발생했습니다. 다시 시도해주세요.");
+        } finally {
+            // 작업 끝나면 버튼 활성화하고 원래 상태로 되돌리기
+            registerButton.disabled = false;
+            registerButton.innerHTML = "수정하기";
+            registerButton.style.backgroundColor = "#ef0e0e";  // 원래 버튼 색상
+        }
+    }
         
         
     });

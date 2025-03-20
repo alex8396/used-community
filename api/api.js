@@ -141,26 +141,21 @@ export async function buyProduct(productId, buyerNickname) {
         throw error;
     }
 }
-export async function updateProductById(name, category, description, price, images, nickname) {
+export async function updateProductById(id, name, category, description, price, nickname) {
     const formData = new FormData();
+    formData.append("id", id);
     formData.append("name", name);
     formData.append("category", category);
     formData.append("description", description);
     formData.append("price", price);
     formData.append("nickname", nickname);
-
-    // 이미지들을 FormData에 추가
-    Array.from(images).forEach((image, index) => {
-        console.log(`image${index + 1}:`, image);
-        formData.append(`image${index + 1}`, image);  // image1, image2, image3으로 추가
-    });
-    console.log(formData)
+    
     try {
-        // const response = await axios.post(`${URL}/api/products/new`, formData, {
-        //     headers: {
-        //         "Content-Type": "multipart/form-data"  // 멀티파트 요청 헤더
-        //     }
-        // });
+        const response = await axios.post(`${URL}/api/products/update`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"  // 멀티파트 요청 헤더
+            }
+        });
         return response;
     } catch (error) {
         console.error("Error adding product:", error);
