@@ -28,7 +28,6 @@ window.onload = async () => {
     headerContent.innerHTML = isLogin
       ? `<div id="logoutButton">로그아웃</div><div id="nickname">${sessionNickname}</div>`
       : `<div id="authButton">로그인/회원가입</div>`;
-
     // 로그인/로그아웃 시에만 새로고침
     if (shouldReload) {
         window.location.reload();
@@ -75,6 +74,9 @@ window.onload = async () => {
     gotoLogin.style.display = isSignup ? "block" : "none";
     gotoLogin.style.display = isSignup ? "block" : "none";
     welcomeMessage.style.display = "none";
+    const kakaoLoginSpan = document.getElementById("kakaoLoginSpan");
+    kakaoLoginSpan.style.display = isSignup ? "none" : "block"
+    
     resetAuthForm();
   };
 
@@ -165,7 +167,13 @@ window.onload = async () => {
   document.querySelectorAll("a").forEach(anchor => {
     anchor.addEventListener("click", (event) => {
       event.preventDefault();
-      history.pushState(null, null, anchor.getAttribute("href"));
+      const targetUrl = anchor.getAttribute("href");
+      // 외부 링크인 경우에는 window.location.href로 처리
+      if (targetUrl.startsWith("http")) {
+        window.location.href = targetUrl;
+      } else {
+        history.pushState(null, null, targetUrl);
+      }
     });
   });
 
