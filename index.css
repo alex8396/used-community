@@ -229,7 +229,7 @@ nav{
 #modalLoginBtn{
     display: block;
     width: 374px;
-    height: 40px;
+    height: 45px;
     padding: 8px 16px;
     border: none;
     border-radius: 10px;
@@ -285,7 +285,7 @@ nav{
 #modalSignupBtn{
     display: none;
     width: 374px;
-    height: 40px;
+    height: 45px;
     padding: 8px 16px;
     border: none;
     border-radius: 10px;
@@ -348,3 +348,22 @@ nav{
     justify-content: center;
     align-items: center;
 }
+
+#kakaoLoginSpan{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 374px; 
+    height: 40px;
+    margin-top: 12px;
+}
+#kakaoLoginSpan a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 374px; 
+    height: 45px;
+    background-color: #fee500;
+    border-radius: 10px;
+}
+
