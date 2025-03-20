@@ -26,7 +26,8 @@ const renderProducts = (products) => {
         
         productHTML += `
             <div class="product-card" data-product-id="${product.id}">
-                <img src="${product.image1}" alt="${product.name}" class="product-image">
+                <img src="${product.image1}" alt="${product.name}" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="fallback-text"></span>
                 <p class="product-title">${product.name}</p>
                 <div class="product-info">
                     <div class="price-time">

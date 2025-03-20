@@ -33,7 +33,7 @@ body {
     gap: 16px;
     max-width: 1024px;
     margin: auto;
-    padding: 0 20px;
+    padding: 20px;
     justify-content: flex-start; /* 왼쪽 정렬 */
     align-items: flex-start;
 }
@@ -41,7 +41,7 @@ body {
 .product-card {
     flex: 0 0 calc(20% - 13px);
     min-width: 170px;
-    max-width: 190px;
+    max-width: 192px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -50,15 +50,27 @@ body {
     box-sizing: border-box;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 275.8px;
 }
 .product-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 .product-card img {
-    width: 100%;
-    height: auto;
+    width: 167.8px;
+    height: 167.8px;
     border-radius: 8px;
+    object-fit: cover;
+}
+.product-card .fallback-text {
+    display: none;  /* 기본적으로 숨김 */
+    font-size: 14px;
+    background-color: #888;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 167.8px; /* 이미지 크기와 맞게 중앙 정렬 */
+    height: 167.8px;
+    width: 167.8px;
 }
 .product-info {
     display: flex;

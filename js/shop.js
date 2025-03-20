@@ -114,7 +114,8 @@ const shop = () => {
               products.forEach(product => {
                 sellingProducts.innerHTML += `
                   <div class="product-card" data-product-id="${product.id}">
-                    <img src="${product.image1}" alt="${product.name}" class="product-image">
+                    <img src="${product.image1}" alt="${product.name}" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="fallback-text"></span>
                     <div>name : ${product.name}</div>
                     <div>price : ${product.price}</div>
                     <div>status : ${product.isSold}</div>
@@ -150,7 +151,8 @@ const shop = () => {
               products.forEach(product => {  
                 purchaseProducts.innerHTML += `
                   <div class="product-card" data-product-id="${product.productId}">
-                    <img src="${product.image1}" alt="${product.productName}" class="product-image">
+                    <img src="${product.image1}" alt="${product.name}" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="fallback-text"></span>
                     <div>name : ${product.productName}</div>
                     <div>price : ${product.productPrice}</div>
                     <div>${timeAgo(product.purchaseDate)}에 구매함</div>
@@ -182,16 +184,23 @@ const shop = () => {
               products.forEach(product => {  
                 likedProducts.innerHTML += `
                   <div class="product-card" data-product-id="${product.productId}">
-                    <img src="${product.image1}" alt="${product.productName}" class="product-image">
-                    <div>name : ${product.productName}</div>
-                    <div>price : ${product.productPrice}</div>
-                    <div>status : ${product.isSold}</div>
-                    <div>${timeAgo(product.createAt)}</div>
-                    <button class="like-button ${isLiked ? "liked" : ""}" data-product-id="${product.productId}" aria-label="찜하기">
-                        <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                    </button>
+                    <img src="${product.image1}" alt="${product.name}" class="product-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="fallback-text"></span>
+                    
+
+                    <p class="product-title">${product.productName}</p>
+                    <div class="product-info">
+                        <div class="price-time">
+                            <p class="product-price">${product.productPrice}원</p>
+                            <p class="product-time">${timeAgo(product.createAt)}</p>
+                        </div>
+                        <p class="product-status">${product.isSold}</p>
+                        <button class="like-button ${isLiked ? "liked" : ""}" data-product-id="${product.productId}" aria-label="찜하기">
+                          <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                          </svg>
+                        </button>
+                    </div>
                   </div>
                 `;  
               })
