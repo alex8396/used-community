@@ -366,4 +366,6 @@ nav{
     background-color: #fee500;
     border-radius: 10px;
 }
-
+#kakaoLoginSpan a img{
+    z-index: 10;
+}
