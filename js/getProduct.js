@@ -18,10 +18,19 @@ const timeAgo = (date) => {
 const getProduct = async(productId) => {
     const main_data = document.getElementById("main_data");
     const nickname = sessionStorage.getItem("nickname");
+    
+    // CSS 파일 동적 추가
+    if (!document.querySelector('link[href="/css/getProduct.css"]')) {
+        const linkElement = document.createElement('link');
+        linkElement.rel = 'stylesheet';
+        linkElement.href = '/css/getProduct.css';
+        document.head.appendChild(linkElement);
+    }
+
     main_data.innerHTML = ``;
-    try{
+    try {
         const response = await getProductById(productId);
-        if(response.data.status === "ok"){
+        if (response.data.status === "ok") {
             const product = response.data.product;
             console.log(product.liked)
             main_data.innerHTML += `
@@ -30,42 +39,37 @@ const getProduct = async(productId) => {
                     ${product.image2 ? `<img src="${product.image2}" alt="${product.name}" class="product-image"></img>` : ``}
                     ${product.image3 ? `<img src="${product.image3}" alt="${product.name}" class="product-image"></img>` : ``}
                     <div>name : ${product.name}</div>
-                    <div>price : ${product.price}</div>
+                    <div>price : ${product.price}원</div>
                     <div>category : ${product.category}</div>
                     <div>description : ${product.description}</div>
                     <div>status : ${product.isSold}</div>
                     <div>liked : ${product.liked}</div>
                     <div>seller : ${product.nickname}</div>
                     <div>${timeAgo(product.createdAt)}</div>
-                    ${nickname ? ` <!-- 로그인 되어있을 때 -->
-                        ${product.nickname != nickname // 로그인 된 경우, 현재 상품의 판매자가 나와 다를 때
-                            ? `
-                                <button class="like-button ${product.liked ? "liked" : ""}" data-product-id="${product.id}" aria-label="찜하기">
-                                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                    </svg>
+                    ${nickname ? `
+                        ${product.nickname != nickname ? `
+                            <button class="like-button ${product.liked ? "liked" : ""}" data-product-id="${product.id}" aria-label="찜하기">
+                                <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${product.liked ? 'red' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                                <span>찜 ${product.likeCount}</span>
+                            </button>
+                            ${product.isSold == "판매중" ? `
+                                <button class="buyButton" data-product-id="${product.id}">
+                                    바로구매
                                 </button>
-                                ${product.isSold == "판매중" ? `
-                                    <button class="buyButton" data-product-id="${product.id}">
-                                        구매하기
-                                    </button>
-                                `: ``}
-                                
-                            ` 
-                            : ` <!-- 내 상품일 때 -->
-                                ${product.isSold == "판매중" ? `
-                                    <button class="updateButton" data-product-id="${product.id}">
-                                        수정하기
-                                    </button>
-                                    <button class="deleteButton" data-product-id="${product.id}">
-                                        삭제하기
-                                    </button>
-                                `: ``}
-                            `
-                        }    
+                            `: ``}
+                        ` : `
+                            ${product.isSold == "판매중" ? `
+                                <button class="updateButton" data-product-id="${product.id}">
+                                    수정하기
+                                </button>
+                                <button class="deleteButton" data-product-id="${product.id}">
+                                    삭제하기
+                                </button>
+                            `: ``}
+                        `}
                     ` : ``}
-                    
-                    
                 </div>
             `;
         }else{
@@ -74,7 +78,6 @@ const getProduct = async(productId) => {
     }catch{
         main_data.innerHTML = '<div class="empty-message">상품을 불러오는 데 실패했습니다.</div>';
     }
-
 
     document.addEventListener("click", async (e) => {
         const updateButton = e.target.closest(".updateButton");
@@ -97,7 +100,6 @@ const getProduct = async(productId) => {
                 }
             }
         }
-        
 
         const likeButton = e.target.closest(".like-button");
         if (likeButton) {
@@ -144,8 +146,6 @@ const getProduct = async(productId) => {
             e.stopPropagation(); // 이벤트 전파 방지 (상품 상세 페이지로 이동하는 것을 막음)
 
             const productId = buyButton.dataset.productId;
-            
-
             const confirmPurchase = confirm("구매하시겠습니까?");
             if (!confirmPurchase) {
                 return; // 사용자가 취소하면 아무 것도 하지 않고 종료
@@ -171,7 +171,6 @@ const getProduct = async(productId) => {
             }
         }
     });
-    
 };
 
 // 페이지 로딩 시 URL에 맞게 상태 초기화
@@ -187,15 +186,6 @@ const initGetProduct = () => {
 
 // 초기화
 window.addEventListener("DOMContentLoaded", initGetProduct);
-
-// 내상점 링크 클릭 이벤트 처리
-// document.addEventListener("click", (e) => {
-//     if (e.target.closest("#navMyStoreLink")) {
-//         e.preventDefault();
-//         history.replaceState(null, null, "/shop");  // replaceState로 URL 변경
-//         getProduct();  // 페이지 렌더링
-//     }
-// });
 
 // popstate 이벤트 처리 (뒤로가기를 눌렀을 때 호출)
 window.addEventListener("popstate", initGetProduct);
