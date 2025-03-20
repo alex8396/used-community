@@ -44,7 +44,6 @@ const shop = () => {
             </div>
             <div class="shop-info">
                 <h1 id="shopNickname">${nickname}</h1>
-                <p>상품 <span id="productCount">0</span> · 찜 <span id="likeCount">0</span></p>
             </div>
         </div>
 
