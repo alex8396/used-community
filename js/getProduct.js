@@ -27,43 +27,29 @@ const getProduct = async(productId) => {
             main_data.innerHTML += `
                 <div data-product-id="${product.id}">
                     <img src="${product.image1}" alt="${product.name}" class="product-image">
-                    ${product.image2 ? `<img src="${product.image2}" alt="${product.name}" class="product-image"></img>` : ``}
-                    ${product.image3 ? `<img src="${product.image3}" alt="${product.name}" class="product-image"></img>` : ``}
+                    ${product.image2 ? `<img src="${product.image2}" alt="${product.name}" class="product-image">` : ``}
+                    ${product.image3 ? `<img src="${product.image3}" alt="${product.name}" class="product-image">` : ``}
                     <div>name : ${product.name}</div>
-                    <div>price : ${product.price}</div>
+                    <div>price : ${product.price}원</div>
                     <div>category : ${product.category}</div>
                     <div>description : ${product.description}</div>
                     <div>status : ${product.isSold}</div>
                     <div>liked : ${product.liked}</div>
                     <div>seller : ${product.nickname}</div>
                     <div>${timeAgo(product.createdAt)}</div>
-                    ${nickname ? ` <!-- 로그인 되어있을 때 -->
-                        ${product.nickname != nickname // 로그인 된 경우, 현재 상품의 판매자가 나와 다를 때
-                            ? `
-                                <button class="like-button ${product.liked ? "liked" : ""}" data-product-id="${product.id}" aria-label="찜하기">
-                                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                    </svg>
-                                </button>
-                                ${product.isSold == "판매중" ? `
-                                    <button class="buyButton" data-product-id="${product.id}">
-                                        구매하기
-                                    </button>
-                                `: ``}
-                                
-                            ` 
-                            : ` <!-- 내 상품일 때 -->
-                                <button class="updateButton" data-product-id="${product.id}">
-                                    수정하기
-                                </button>
-                                <button class="deleteButton" data-product-id="${product.id}">
-                                    삭제하기
-                                </button>
-                            `
-                        }    
+                    ${nickname ? `
+                        ${product.nickname != nickname ? `
+                            <button class="like-button ${product.liked ? "liked" : ""}" data-product-id="${product.id}" aria-label="찜하기">
+                                <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
+                            ${product.isSold == "판매중" ? `<button class="buyButton" data-product-id="${product.id}">구매하기</button>` : ``}
+                        ` : `
+                            <button class="updateButton" data-product-id="${product.id}">수정하기</button>
+                            <button class="deleteButton" data-product-id="${product.id}">삭제하기</button>
+                        `}
                     ` : ``}
-                    
-                    
                 </div>
             `;
         }else{
