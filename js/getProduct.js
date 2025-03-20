@@ -53,12 +53,14 @@ const getProduct = async(productId) => {
                                 
                             ` 
                             : ` <!-- 내 상품일 때 -->
-                                <button class="updateButton" data-product-id="${product.id}">
-                                    수정하기
-                                </button>
-                                <button class="deleteButton" data-product-id="${product.id}">
-                                    삭제하기
-                                </button>
+                                ${product.isSold == "판매중" ? `
+                                    <button class="updateButton" data-product-id="${product.id}">
+                                        수정하기
+                                    </button>
+                                    <button class="deleteButton" data-product-id="${product.id}">
+                                        삭제하기
+                                    </button>
+                                `: ``}
                             `
                         }    
                     ` : ``}
@@ -89,16 +91,20 @@ const getProduct = async(productId) => {
         }  
         
         const deleteButton = e.target.closest(".deleteButton");
-        if(deleteButton){
+        if (deleteButton) {
             const productId = deleteButton.dataset.productId;
-            const response = await deleteProduct(productId);
-            if (response.data.status === "ok") {
-                alert("상품이 삭제되었습니다.");
-                window.location.href = "/";
-            } else {
-                alert("상품 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+            const confirmDelete = confirm("삭제하시겠습니까?");
+
+            if (confirmDelete) {
+                const response = await deleteProduct(productId);
+                if (response.data.status === "ok") {
+                    alert("상품이 삭제되었습니다.");
+                    window.location.href = "/";
+                } else {
+                    alert("상품 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+                }
             }
-        }  
+        }
         
 
         const likeButton = e.target.closest(".like-button");
