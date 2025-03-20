@@ -144,8 +144,13 @@ const getProduct = async(productId) => {
             e.stopPropagation(); // 이벤트 전파 방지 (상품 상세 페이지로 이동하는 것을 막음)
 
             const productId = buyButton.dataset.productId;
-            const originalHTML = buyButton.innerHTML;  // 원래 버튼 내용을 저장
+            
 
+            const confirmPurchase = confirm("구매하시겠습니까?");
+            if (!confirmPurchase) {
+                return; // 사용자가 취소하면 아무 것도 하지 않고 종료
+            }
+            const originalHTML = buyButton.innerHTML;  // 원래 버튼 내용을 저장
             // 버튼 내부 내용을 스피너로 변경
             buyButton.innerHTML = `<div class="likedSpinner"></div>`;
             buyButton.disabled = true;  // 버튼 비활성화

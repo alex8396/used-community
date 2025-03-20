@@ -1,8 +1,6 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    background-color: #f8f8f8;
 }
 
 
@@ -19,8 +17,16 @@ body {
     margin-bottom: 30px;
 }
 
-
-
+.product-grid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 1024px;
+    margin: auto;
+    padding: 20px 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
 .shop-info h1 {
     font-size: 24px;
     margin: 0 0 10px 0;
@@ -69,6 +75,7 @@ body {
     text-align: center;
     padding: 40px;
     color: #666;
+    width: 100%;
 }
 
 /* 헤더 스타일 */
