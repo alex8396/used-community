@@ -63,3 +63,23 @@ export async function getAllProducts() {
         throw error;
     }
 }
+
+// 찜하기 토글 API
+export const toggleLike = async (productId) => {
+    try {
+        const response = await axios.post('/api/likes/toggle', { productId });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// 찜한 상품 목록 가져오기
+export const getLikedProducts = async () => {
+    try {
+        const response = await axios.get('/api/likes');
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -118,90 +119,91 @@
     </style>
 </head>
 <body>
+  <body>
     <!-- Header -->
-    <header class="w-100">
-        <div id="headerContent"></div>
-    </header>
-    
-    <!-- Nav -->
-    <nav>
-        <div id="navTop">
-            <a href="/" id="logoLink">
-                <img src="/img/bgzt_logo.svg" alt="번개장터 로고" id="logoImg">
+<header class="w-100">
+    <div id="headerContent"></div>
+</header>
+
+<!-- Nav -->
+<nav>
+    <div id="navTop">
+        <a href="/" id="logoLink">
+            <img src="/img/bgzt_logo.svg" alt="번개장터 로고" id="logoImg">
+        </a>
+        <div id="navTopCenter">
+            <div id="navInput">
+                <input type="text" placeholder="상품명 입력">
+                <a id="searchIconWrapper">
+                    <img src="/img/searchIcon.png" alt="검색" id="searchIcon">
+                </a>
+            </div>
+        </div>
+        <div id="navTopRight">
+            <a href="/products/new" id="navSellLink">
+                <img src="/img/sell.png" alt="판매하기" id="navSellImg"> 판매하기
             </a>
-            <div id="navTopCenter">
-                <div id="navInput">
-                    <input type="text" placeholder="상품명 입력">
-                    <a id="searchIconWrapper">
-                        <img src="/img/searchIcon.png" alt="검색" id="searchIcon">
-                    </a>
-                </div>
-            </div>
-            <div id="navTopRight">
-                <a href="/products/new" id="navSellLink">
-                    <img src="/img/sell.png" alt="판매하기" id="navSellImg"> 판매하기
-                </a>
-                <a href="/shop" id="navMyStoreLink">
-                    <img src="/img/my_store.png" alt="내상점" id="navMyStoreImg"> 내상점
-                </a>
-            </div>
+            <a href="/shop" id="navMyStoreLink">
+                <img src="/img/my_store.png" alt="내상점" id="navMyStoreImg"> 내상점
+            </a>
         </div>
-    </nav>
-    <!-- 로그인/회원가입 모달 -->
-    <div id="authModal" class="modal">
-      <div id="modalContent">
-        <div id="modalHeader">
-          <img src="/img/closeIcon.png" alt="닫기 버튼" id="modalCloseBtn">
+    </div>
+</nav>
+<!-- 로그인/회원가입 모달 -->
+<div id="authModal" class="modal">
+  <div id="modalContent">
+    <div id="modalHeader">
+      <img src="/img/closeIcon.png" alt="닫기 버튼" id="modalCloseBtn">
+    </div>
+    <div id="modalBody">
+      <img src="/img/bgzt_icon.svg" alt="번개장터" id="bgztIcon">
+      <div id="modalTitle">번개장터로 중고거래 시작하기</div>
+      <div id="modalDscrp">간편하게 가입하고 상품을 확인하세요</div>
+      
+      <form action="" id="authForm">
+        <div class="modalInputWrapper" id="modalEmailWrapper">
+          <input type="text" placeholder="이메일" class="modalInput" id="emailInput">
         </div>
-        <div id="modalBody">
-          <img src="/img/bgzt_icon.svg" alt="번개장터" id="bgztIcon">
-          <div id="modalTitle">번개장터로 중고거래 시작하기</div>
-          <div id="modalDscrp">간편하게 가입하고 상품을 확인하세요</div>
-          
-          <form action="" id="authForm">
-            <div class="modalInputWrapper" id="modalEmailWrapper">
-              <input type="text" placeholder="이메일" class="modalInput" id="emailInput">
-            </div>
-            <div id="emailErrorMsg">
-            </div>
-            <div class="modalInputWrapper" id="modalPasswordWrapper">
-              <input type="password" placeholder="비밀번호" class="modalInput" id="passwordInput">
-            </div>
-            <div id="passwordErrorMsg"></div>
-            <div class="modalInputWrapper" id="modalNicknameWrapper">
-              <input type="text" placeholder="닉네임" class="modalInput" id="nicknameInput">
-            </div>
-            <div id="nicknameErrorMsg"></div>
-            <button type="button" id="modalLoginBtn" style="display: block;">
-              로그인
-            </button>
-            
-            <button type="button" id="modalSignupBtn">
-              회원가입
-            </button>
-            <span id="loginSpan">
-              <a href="http://localhost:8080/kakaoLogin"><img src="img/kakao_login_medium_narrow.png" alt=""></a>
-          </span>
-            <div id="welcomeMessage">
-              <h2>환영합니다!</h2>
-              <p>가입이 완료되었어요!</p>
-            </div>
-          </form>
-          
+        <div id="emailErrorMsg">
         </div>
-        <div id="modalFooter">
-          <div id="gotoSignup">
-            회원가입 하러가기
-          </div>
-          <div id="gotoLogin">
-            로그인 하러가기
-          </div>
+        <div class="modalInputWrapper" id="modalPasswordWrapper">
+          <input type="password" placeholder="비밀번호" class="modalInput" id="passwordInput">
         </div>
+        <div id="passwordErrorMsg"></div>
+        <div class="modalInputWrapper" id="modalNicknameWrapper">
+          <input type="text" placeholder="닉네임" class="modalInput" id="nicknameInput">
+        </div>
+        <div id="nicknameErrorMsg"></div>
+        <button type="button" id="modalLoginBtn" style="display: block;">
+          로그인
+        </button>
+        
+        <button type="button" id="modalSignupBtn">
+          회원가입
+        </button>
+        <span id="loginSpan">
+          <a href="http://localhost:8080/kakaoLogin"><img src="img/kakao_login_medium_narrow.png" alt=""></a>
+      </span>
+        <div id="welcomeMessage">
+          <h2>환영합니다!</h2>
+          <p>가입이 완료되었어요!</p>
+        </div>
+      </form>
+      
+    </div>
+    <div id="modalFooter">
+      <div id="gotoSignup">
+        회원가입 하러가기
+      </div>
+      <div id="gotoLogin">
+        로그인 하러가기
       </div>
     </div>
+  </div>
+</div>
     <!-- Main data (상품 목록) -->
     <div id="main_data" class="container">
-      <div class="product-card" data-product-id="1">
+      <div class="product-card" onclick="location.href='/product/detail?id=1'">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -216,7 +218,7 @@
           </button>
         </div>
       </div>
-      <div class="product-card" data-product-id="2">
+      <div class="product-card" onclick="location.href='/product/detail?id=1'">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -231,7 +233,7 @@
           </button>
         </div>
       </div>
-      <div class="product-card" data-product-id="3">
+      <div class="product-card" onclick="location.href='/product/detail?id=1'">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -246,7 +248,7 @@
           </button>
         </div>
       </div>
-      <div class="product-card" data-product-id="4">
+      <div class="product-card" onclick="location.href='/product/detail?id=1'">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -261,7 +263,7 @@
           </button>
         </div>
       </div>
-      <div class="product-card" data-product-id="5">
+      <div class="product-card" onclick="location.href='/product/detail?id=1'">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">
@@ -276,7 +278,67 @@
           </button>
         </div>
       </div>
-      <div class="product-card" data-product-id="6">
+      <div class="product-card" onclick="location.href='/product/detail?id=2'">
+        <img src="img/comment.png" alt="3T 악스 신형">
+        <p class="product-title">3T 악스 신형</p>
+        <div class="product-info">
+          <div class="price-time">
+            <p class="product-price">50,000원</p>
+            <p class="product-time">1분전</p>
+          </div>
+          <button class="like-button" aria-label="찜하기">
+            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="product-card" onclick="location.href='/product/detail?id=3'">
+        <img src="img/comment.png" alt="3T 악스 신형">
+        <p class="product-title">3T 악스 신형</p>
+        <div class="product-info">
+          <div class="price-time">
+            <p class="product-price">50,000원</p>
+            <p class="product-time">1분전</p>
+          </div>
+          <button class="like-button" aria-label="찜하기">
+            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="product-card" onclick="location.href='/product/detail?id=4'">
+        <img src="img/comment.png" alt="3T 악스 신형">
+        <p class="product-title">3T 악스 신형</p>
+        <div class="product-info">
+          <div class="price-time">
+            <p class="product-price">50,000원</p>
+            <p class="product-time">1분전</p>
+          </div>
+          <button class="like-button" aria-label="찜하기">
+            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="product-card" onclick="location.href='/product/detail?id=5'">
+        <img src="img/comment.png" alt="3T 악스 신형">
+        <p class="product-title">3T 악스 신형</p>
+        <div class="product-info">
+          <div class="price-time">
+            <p class="product-price">50,000원</p>
+            <p class="product-time">1분전</p>
+          </div>
+          <button class="like-button" aria-label="찜하기">
+            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="product-card" onclick="location.href='/product/detail?id=6'">
         <img src="img/comment.png" alt="3T 악스 신형">
         <p class="product-title">3T 악스 신형</p>
         <div class="product-info">

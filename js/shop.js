@@ -1,4 +1,4 @@
-import { signup, login, logout } from '/api/api.js';
+import { signup, login, logout, toggleLike } from '/api/api.js';
 
 window.onload = async () => {
   
@@ -15,6 +15,7 @@ window.onload = async () => {
   const gotoLogin = document.getElementById("gotoLogin");
   const nicknameWrapper = document.getElementById("modalNicknameWrapper");
   const welcomeMessage = document.getElementById("welcomeMessage");
+  const shopNickname = document.getElementById("shopNickname");
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
   const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
@@ -23,9 +24,16 @@ window.onload = async () => {
     const sessionNickname = sessionStorage.getItem("nickname");
     axios.defaults.headers.common["Authorization"] = sessionStorage.getItem("Authorization");
     const headerContent = document.getElementById("headerContent");
-    headerContent.innerHTML = isLogin
-      ? `<div id="logoutButton">로그아웃</div><div id="nickname">${sessionNickname}</div>`
-      : `<div id="authButton">로그인/회원가입</div>`;
+    
+    if (isLogin && sessionNickname) {
+      headerContent.innerHTML = `<div id="logoutButton">로그아웃</div><div id="nickname">${sessionNickname}</div>`;
+      document.querySelector('.shop-container').style.display = 'block';
+      document.getElementById("shopNickname").textContent = sessionNickname;
+    } else {
+      headerContent.innerHTML = `<div id="authButton">로그인/회원가입</div>`;
+      document.getElementById("shopNickname").textContent = "로그인이 필요합니다";
+      document.querySelector('.shop-container').style.display = 'none';
+    }
   };
 
   const resetButton = (button, text) => {
@@ -78,9 +86,10 @@ window.onload = async () => {
         await logout();
         sessionStorage.clear();
         toggleLoginState(false);
+        window.location.href = "/";
       } catch (error) {
         console.error("로그아웃 오류:", error);
-        alert("로그아웃 중 오류가 발생했습니다. 다시 시도해주세요.");
+        alert("로그아웃 중 오류가 발생했습니다.");
       }
       event.target.disabled = false;
     }
@@ -108,6 +117,7 @@ window.onload = async () => {
             toggleLoginState(true);
             modal.style.display = "none";
             resetAuthForm();
+            window.location.reload();
           } else alert(response.data.msg);
         } else {
           const response = await signup(emailInput.value, passwordInput.value, nicknameInput.value);
@@ -160,42 +170,66 @@ window.onload = async () => {
     });
   });
 
+  // 사용자 정보 로드 함수
+  const loadUserInfo = () => {
+    const sessionNickname = sessionStorage.getItem("nickname");
+    
+    if (sessionNickname) {
+      // 로그인된 경우
+      shopNickname.textContent = sessionNickname;
+      document.querySelector('.shop-container').style.display = 'block';
+    } else {
+      // 로그인되지 않은 경우
+      alert("로그인을 해주세요!");
+      shopNickname.textContent = "로그인이 필요합니다";
+      document.querySelector('.shop-container').style.display = 'none';
+      
+      // 로그인 모달 표시
+      const modal = document.getElementById("authModal");
+      modal.style.display = "flex";
+    }
+  };
+
+  // 페이지 로드 시 초기 상태 설정
+  loadUserInfo();
   toggleLoginState(sessionStorage.getItem("Authorization"));
 
   // 상품 카드 클릭 이벤트 처리
   document.querySelectorAll('.product-card').forEach(card => {
     card.addEventListener('click', function(e) {
-      // 찜하기 버튼 클릭 시 상세 페이지 이동 방지
       if (e.target.closest('.like-button')) {
-        e.preventDefault();
         return;
       }
-      
-      const productId = this.getAttribute('data-product-id');
-      window.location.href = `/product/detail?id=${productId}`;
+      const productId = this.dataset.productId;
+      window.location.href = `/product-detail.html?id=${productId}`;
     });
   });
 
   // 찜하기 버튼 이벤트 처리
   document.querySelectorAll('.like-button').forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.stopPropagation(); // 상품 카드 클릭 이벤트 전파 방지
+    button.addEventListener('click', async function(e) {
+      e.stopPropagation();
       
-      // 버튼 상태 토글
-      this.classList.toggle('active');
+      if (!sessionStorage.getItem("Authorization")) {
+        alert("로그인이 필요한 기능입니다.");
+        document.getElementById("authModal").style.display = "flex";
+        return;
+      }
       
-      // 여기에 찜하기 API 호출 로직 추가
       const productId = this.closest('.product-card').dataset.productId;
-      const isLiked = this.classList.contains('active');
       
       try {
-        // API 호출 예시
-        // await toggleLikeProduct(productId, isLiked);
-        console.log(`상품 ${productId} 찜하기 ${isLiked ? '추가' : '취소'}`);
+        const response = await toggleLike(productId);
+        if (response.data.success) {
+          this.classList.toggle('active');
+          
+          if (document.querySelector('.tab-button[data-tab="liked"]').classList.contains('active')) {
+            loadProducts('liked');
+          }
+        }
       } catch (error) {
         console.error('찜하기 처리 중 오류 발생:', error);
-        // 에러 발생 시 토글 되돌리기
-        this.classList.toggle('active');
+        alert('찜하기 처리에 실패했습니다.');
       }
     });
   });

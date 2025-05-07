@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 상세 - 번개장터</title>
+    <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/css/add-product.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="icon" href="/img/bgzt_favicon.svg">
+    <style>
+        .product-detail-container {
+            max-width: 1024px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .product-image {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .product-info {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff4b4b;
+            margin-bottom: 20px;
+        }
+
+        .product-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .seller-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .like-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .like-button.active {
+            color: #ff4b4b;
+            border-color: #ff4b4b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header와 Nav는 기존과 동일 -->
+    
+    <div class="product-detail-container">
+        <img src="" alt="" class="product-image" id="productImage">
+        <div class="product-info">
+            <h1 class="product-title" id="productTitle"></h1>
+            <div class="product-price" id="productPrice"></div>
+            <div class="seller-info">
+                <span>판매자: </span>
+                <span id="sellerName"></span>
+            </div>
+            <div class="product-description" id="productDescription"></div>
+            <div class="action-buttons">
+                <button class="like-button" id="likeButton">
+                    <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"></svg>
+                    찜하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer는 기존과 동일 -->
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="module" src="/js/product-detail.js"></script>
+</body>
+</html> 
